@@ -155,6 +155,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 10
+  lookSpeed: 100
+  cam: {fileID: 3774336999050517432}
 --- !u!54 &4431288156866847331
 Rigidbody:
   m_ObjectHideFlags: 0
