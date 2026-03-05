@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Unity.Cinemachine;
@@ -24,6 +25,8 @@ public class PlayerMovement : MonoBehaviour
     
     public Transform cam;
     
+    public bool gameOver = false;
+    public bool gameWin = false;
     PlayerStats stats;
 
     void Awake()
@@ -85,6 +88,14 @@ public class PlayerMovement : MonoBehaviour
         if (follow != null)
         {
             follow.CameraDistance = distance;
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Dead"))
+        {
+            gameOver = true;
         }
     }
 }
