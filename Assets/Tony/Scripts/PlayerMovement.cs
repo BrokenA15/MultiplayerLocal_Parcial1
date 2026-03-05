@@ -10,7 +10,13 @@ public class PlayerMovement : MonoBehaviour
     public float lookSpeed = 100f;
     public float rotationSpeed = 10f;
     public Transform cam;
-    
+    PlayerStats stats;
+
+    void Awake()
+    {
+        stats = GetComponent<PlayerStats>();
+    }
+
     public void OnMove(InputValue action)
     {
         move = action.Get<Vector2>();
