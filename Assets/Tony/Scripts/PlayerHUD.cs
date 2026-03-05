@@ -36,7 +36,6 @@ public class PlayerHUD : MonoBehaviour
         if (winLoseCondition.gameOver == true)
         {
             LoseScreen.SetActive(true);
-            _player.SetActive(false);
         }
 
         if (winLoseCondition.gameWin == true)

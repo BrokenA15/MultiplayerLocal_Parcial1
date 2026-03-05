@@ -14,7 +14,8 @@ public class PlayerMovement : MonoBehaviour
     public float verticalLookSpeed = 80f;
     public float minAngle = 20f;
     public float maxAngle = 80f;
-    
+
+    [SerializeField]
     private float currentAngle = 45f;
     
     public CinemachineCamera virtualCamera;
@@ -97,9 +98,9 @@ public class PlayerMovement : MonoBehaviour
         
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collision other)
     {
-        if (other.CompareTag("Dead"))
+        if (other.gameObject.CompareTag("Dead"))
         {
             gameOver = true;
             GameManager.instance.CheckWinCondition();
