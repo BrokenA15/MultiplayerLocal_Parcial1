@@ -280,16 +280,16 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1726063571}
-        m_TargetAssemblyTypeName: Splashscreen, Assembly-CSharp
-        m_MethodName: 
-        m_Mode: 1
+      - m_Target: {fileID: 1726063573}
+        m_TargetAssemblyTypeName: LevelManager, Assembly-CSharp
+        m_MethodName: LevelLoader
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: MainMenu
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &499545735
@@ -583,26 +583,17 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5294502999734194217, guid: 8d10844ed07390d45969aa2acc214e6e, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1726063572}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8d10844ed07390d45969aa2acc214e6e, type: 3}
---- !u!1 &1726063571 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5294502999734194217, guid: 8d10844ed07390d45969aa2acc214e6e, type: 3}
+--- !u!114 &1726063573 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5908367326534643158, guid: 8d10844ed07390d45969aa2acc214e6e, type: 3}
   m_PrefabInstance: {fileID: 1726063570}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1726063572
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1726063571}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 476319a2832727c4590ca27a3597f301, type: 3}
+  m_Script: {fileID: 11500000, guid: 4956eeb6d95115849ad76cdc3203074e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807

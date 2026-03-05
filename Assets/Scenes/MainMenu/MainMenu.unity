@@ -1068,7 +1068,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1743567965}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 7465092912922836345}
+        m_TargetAssemblyTypeName: LevelManager, Assembly-CSharp
+        m_MethodName: LevelLoader
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Credits
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1743567965
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1420,7 +1432,7 @@ MonoBehaviour:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 80, y: 51.699997, z: 0}
   ComponentScale: {x: 1, y: 1, z: 1}
-  FillSize: {x: 799.99994, y: 449.99997, z: 0}
+  FillSize: {x: 800, y: 449.93756, z: 0}
   ShrinkSize: {x: 999999, y: 999999, z: 999999}
   TargetPosition: {x: 13, y: -16, z: 0}
   TargetRotation: {x: -0, y: -0, z: -0, w: 1}
@@ -1623,6 +1635,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8d10844ed07390d45969aa2acc214e6e, type: 3}
+--- !u!114 &7465092912922836345 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5908367326534643158, guid: 8d10844ed07390d45969aa2acc214e6e, type: 3}
+  m_PrefabInstance: {fileID: 7465092912922836344}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4956eeb6d95115849ad76cdc3203074e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
