@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Unity.Cinemachine;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -7,14 +8,32 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 move;
     private Vector2 look;
     public float speed = 2;
-    public float lookSpeed = 100f;
-    public float rotationSpeed = 10f;
+    
+    public float rotationSpeed = 5f;
+    public float verticalLookSpeed = 80f;
+    public float minAngle = 20f;
+    public float maxAngle = 80f;
+    
+    private float currentAngle = 45f;
+    
+    public CinemachineCamera virtualCamera;
+    private CinemachineThirdPersonFollow follow;
+    
+    public float closeDistance = 6f;
+    public float farDistance = 10f;
+    
     public Transform cam;
+    
     PlayerStats stats;
 
     void Awake()
     {
         stats = GetComponent<PlayerStats>();
+    }
+    
+    void Start()
+    {
+        follow = virtualCamera.GetComponent<CinemachineThirdPersonFollow>();
     }
 
     public void OnMove(InputValue action)
@@ -22,10 +41,10 @@ public class PlayerMovement : MonoBehaviour
         move = action.Get<Vector2>();
     }
 
-    /*public void OnLook(InputValue action)
+    public void OnLook(InputValue action)
     {
         look = action.Get<Vector2>();
-    }*/
+    }
     
     public void OnInteract(InputValue value)
     {
@@ -46,6 +65,7 @@ public class PlayerMovement : MonoBehaviour
         camRight.Normalize();
         
         Vector3 moveDir = camForward * move.y + camRight * move.x;
+        
         transform.position += moveDir * (speed * Time.deltaTime);
 
         if (moveDir != Vector3.zero)
@@ -53,9 +73,18 @@ public class PlayerMovement : MonoBehaviour
             Quaternion targetRotation = Quaternion.LookRotation(moveDir);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
         }
-        if (cam != null)    
+        
+        currentAngle -= look.y * verticalLookSpeed * Time.deltaTime;
+        currentAngle = Mathf.Clamp(currentAngle, minAngle, maxAngle);
+
+        cam.localRotation = Quaternion.Euler(currentAngle, 0, 0);
+
+        float t = Mathf.InverseLerp(maxAngle, minAngle, currentAngle);
+        float distance = Mathf.Lerp(closeDistance, farDistance, t);
+
+        if (follow != null)
         {
-            cam.RotateAround(transform.position, Vector3.up, look.x * lookSpeed  * Time.deltaTime);
+            follow.CameraDistance = distance;
         }
     }
 }
