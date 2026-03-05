@@ -8,12 +8,10 @@ public class Spawner : MonoBehaviour
     int spawnCount = 0;
     public void OnPlayerJoined(PlayerInput playerInput)
     {
+       
         playerInput.transform.position = spawnpos[spawnCount].position;
         spawnCount++;
     }
-
-
-
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
