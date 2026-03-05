@@ -21,6 +21,6 @@ public class Bullet : MonoBehaviour
             rb.AddForce(dir * knockback / resistance, ForceMode.Impulse);
         }
 
-        Destroy(gameObject);
+        Destroy(gameObject, 1.5f);
     }
 }

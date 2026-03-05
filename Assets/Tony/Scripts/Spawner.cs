@@ -7,14 +7,22 @@ public class Spawner : MonoBehaviour
 {
     public Transform[] spawnpos;
     int spawnCount = 0;
-    public Transform ringCenter;
-
+    public GameObject joinText;
+    public GameObject camInicial;
     public void OnPlayerJoined(PlayerInput playerInput)
     {
+        if (joinText != null)
+        {
+            joinText.SetActive(false);
+        }
+
+        if (camInicial != null)
+        {
+            camInicial.SetActive(false);
+        }
         Transform spawn = spawnpos[spawnCount];
-        playerInput.transform.SetPositionAndRotation(
-            spawn.position,
-            Quaternion.identity);
+        playerInput.transform.SetPositionAndRotation(spawn.position, Quaternion.identity);
+        HUDManager.instance.CreateHUD(playerInput.gameObject);
         spawnCount++;
     }
 }

@@ -20,14 +20,11 @@ public class BulletDestroy : MonoBehaviour
       }
    }
 
-   void Update()
-   {
-      Destroy(gameObject, 6f);
-   }
+   
 
    private IEnumerator DestroyBullet()
    {
-      yield return new WaitForSeconds(1f);
+      yield return new WaitForSeconds(2f);
       Destroy(this.gameObject);
    }
 }
