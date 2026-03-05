@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -7,22 +8,30 @@ public class PlayerShoot : MonoBehaviour
     public Transform bulletSpawn;
     public float bulletForce = 20f;
 
+    public int shootsAvailable;
 
-    //-------------------------------------------------------//
-    //------------------------Start--------------------------//
-    //-------------------------------------------------------//
+    private float shotTimer;
     PlayerStats stats; 
+    
 
     void Awake()
     {
         stats = GetComponent<PlayerStats>();
+        shootsAvailable = 0;
+        shotTimer = 0f;
     }
-    //--------------------------------------------------------//
-    //-------------------------End----------------------------//
-    //--------------------------------------------------------//
+
+    private void Update()
+    {
+       if(shotTimer > 0) 
+       { 
+           shotTimer -= Time.deltaTime;
+       }
+    }
+
     public void OnAttack(InputValue value)
     {
-        if (value.isPressed)
+        if (value.isPressed && shootsAvailable > 0)
         {
             Shoot();
         }
@@ -30,14 +39,10 @@ public class PlayerShoot : MonoBehaviour
 
     void Shoot()
     {
+        shootsAvailable--;
         GameObject bullet = Instantiate(bulletPrefab, bulletSpawn.position, bulletSpawn.rotation);
-
+        
         Rigidbody rb = bullet.GetComponent<Rigidbody>();
-
-        //-------------------------------------------------------//
-        //------------------------Start--------------------------//
-        //-------------------------------------------------------//
-
         Bullet bulletScript = bullet.GetComponent<Bullet>();
 
         if (bulletScript != null)
@@ -51,15 +56,14 @@ public class PlayerShoot : MonoBehaviour
         {
             rb.linearVelocity = bulletSpawn.forward * bulletForce * stats.projectileForceMultiplier;
         }
+    }
 
-        //--------------------------------------------------------//
-        //-------------------------End----------------------------//
-        //--------------------------------------------------------//
-
-        /*if (rb != null)
+    private void OnCollisionEnter(Collision other)
+    {
+        if (other.gameObject.CompareTag("Food"))
         {
-            rb.linearVelocity = bulletSpawn.forward * bulletForce;
-        }*/
-
+            shootsAvailable++;
+            Destroy(other.gameObject);
+        }
     }
 }

@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 3
   tags:
   - Dead
+  - Piso
+  - Food
+  - Bullet
   layers:
   - Default
   - TransparentFX
