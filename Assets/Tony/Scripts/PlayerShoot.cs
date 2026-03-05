@@ -7,6 +7,19 @@ public class PlayerShoot : MonoBehaviour
     public Transform bulletSpawn;
     public float bulletForce = 20f;
 
+
+    //-------------------------------------------------------//
+    //------------------------Start--------------------------//
+    //-------------------------------------------------------//
+    PlayerStats stats; 
+
+    void Awake()
+    {
+        stats = GetComponent<PlayerStats>();
+    }
+    //--------------------------------------------------------//
+    //-------------------------End----------------------------//
+    //--------------------------------------------------------//
     public void OnAttack(InputValue value)
     {
         if (value.isPressed)
@@ -21,10 +34,32 @@ public class PlayerShoot : MonoBehaviour
 
         Rigidbody rb = bullet.GetComponent<Rigidbody>();
 
+        //-------------------------------------------------------//
+        //------------------------Start--------------------------//
+        //-------------------------------------------------------//
+
+        Bullet bulletScript = bullet.GetComponent<Bullet>();
+
+        if (bulletScript != null)
+        {
+            bulletScript.knockback *= stats.knockbackPower;
+        }
+
+        bullet.transform.localScale *= stats.projectileSizeMultiplier;
+
         if (rb != null)
         {
-            rb.linearVelocity = bulletSpawn.forward * bulletForce;
+            rb.linearVelocity = bulletSpawn.forward * bulletForce * stats.projectileForceMultiplier;
         }
-        
+
+        //--------------------------------------------------------//
+        //-------------------------End----------------------------//
+        //--------------------------------------------------------//
+
+        /*if (rb != null)
+        {
+            rb.linearVelocity = bulletSpawn.forward * bulletForce;
+        }*/
+
     }
 }

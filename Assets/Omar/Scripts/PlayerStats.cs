@@ -6,15 +6,20 @@ public class PlayerStats : MonoBehaviour
 {
 
     [Header("Base Stats")]
-    public float baseSpeed = 2f;
+    //public float baseSpeed = 2f;
     public float baseFireRate = 1f;
-    public float baseProjectileSize = 1f;
+    //public float baseProjectileSize = 1f;
 
     [Header("Runtime Stats")]
-    public float speedMultiplier = 1f;
+    //public float speedMultiplier = 1f;
     public float sizeMultiplier = 1f;
-    public float fireRateMultiplier = 1f;
+
+    public float knockbackResistance = 1f; 
+    public float knockbackPower = 1f; 
     public float projectileSizeMultiplier = 1f;
+    public float projectileForceMultiplier = 1f;
+    //public float fireRateMultiplier = 1f;
+    //public float projectileSizeMultiplier = 1f;
 
     Dictionary<PowerUpType, float> activePowerups = new Dictionary<PowerUpType, float>();
 
@@ -25,7 +30,6 @@ public class PlayerStats : MonoBehaviour
 
     void UpdatePowerups()
     {
-
         List<PowerUpType> keys = new List<PowerUpType>(activePowerups.Keys);
 
         foreach (PowerUpType key in keys)
@@ -55,78 +59,86 @@ public class PlayerStats : MonoBehaviour
 
     void ApplyPowerup(PowerUpType type, float value)
     {
-
         switch (type)
         {
-            case PowerUpType.Speed:
-                speedMultiplier += value;
-                break;
-
             case PowerUpType.Big:
+
                 sizeMultiplier += value;
+                knockbackResistance += value;
+                knockbackPower += value;
+
                 UpdateScale();
                 break;
 
             case PowerUpType.Small:
+
                 sizeMultiplier -= value;
+                knockbackResistance -= value;
+                knockbackPower -= value;
+
                 UpdateScale();
                 break;
 
-            case PowerUpType.FastFire:
-                fireRateMultiplier += value;
-                break;
-
             case PowerUpType.BigProjectiles:
+
                 projectileSizeMultiplier += value;
+                projectileForceMultiplier += value;
+
                 break;
         }
     }
 
     void RemovePowerup(PowerUpType type)
     {
-
         switch (type)
         {
-            case PowerUpType.Speed:
-                speedMultiplier = 1;
-                break;
-
             case PowerUpType.Big:
             case PowerUpType.Small:
+
                 sizeMultiplier = 1;
+                knockbackResistance = 1;
+                knockbackPower = 1;
+
                 UpdateScale();
                 break;
 
-            case PowerUpType.FastFire:
-                fireRateMultiplier = 1;
-                break;
-
             case PowerUpType.BigProjectiles:
+
                 projectileSizeMultiplier = 1;
+                projectileForceMultiplier = 1;
                 break;
         }
-
     }
 
     void UpdateScale()
     {
         transform.localScale = Vector3.one * sizeMultiplier;
+
+        Rigidbody rb = GetComponent<Rigidbody>();
+
+        if (rb != null)
+            rb.mass = sizeMultiplier * 2f;
     }
 
-    public float GetSpeed()
-    {
-        return baseSpeed * speedMultiplier;
-    }
+    /* public float GetSpeed()
+     {
+         return baseSpeed * speedMultiplier;
+     }
 
-    public float GetFireRate()
-    {
-        return baseFireRate * fireRateMultiplier;
-    }
+     public float GetFireRate()
+     {
+         return baseFireRate * fireRateMultiplier;
+     }
 
-    public float GetProjectileSize()
-    {
-        return baseProjectileSize * projectileSizeMultiplier;
-    }
+     public float GetProjectileSize()
+     {
+         return baseProjectileSize * projectileSizeMultiplier;
+     }
+
+     public float GetKnockbackResistance()
+     {
+         return sizeMultiplier;
+     }*/
 
 }
 
