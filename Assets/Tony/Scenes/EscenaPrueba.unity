@@ -867,8 +867,8 @@ Transform:
   m_GameObject: {fileID: 805333946}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 8.48, y: -2.07, z: 8.3446}
-  m_LocalScale: {x: 45.475266, y: 1, z: 45.634274}
+  m_LocalPosition: {x: 1.5766, y: -2.07, z: 12.8562}
+  m_LocalScale: {x: 89.17043, y: 1, z: 90.85538}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -1568,6 +1568,51 @@ Transform:
   m_Children: []
   m_Father: {fileID: 18325152}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1691876368
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1691876369}
+  - component: {fileID: 1691876370}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1691876369
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1691876368}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 25.053438, y: 20.266901, z: 3.3297634}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1691876370
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1691876368}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1db815c949384cd4e8e9104e9d74ac81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  players: []
 --- !u!1 &1779824142
 GameObject:
   m_ObjectHideFlags: 0
@@ -1620,7 +1665,7 @@ MonoBehaviour:
       m_SingletonActionBindings: []
       m_Flags: 0
     m_Reference: {fileID: 0}
-  m_PlayerPrefab: {fileID: 5370540961573693932, guid: fb02d8f97c5385e4cada5bedd47cb2c7, type: 3}
+  m_PlayerPrefab: {fileID: 5370540961573693932, guid: 579f517099807be43a4b9e30e425163f, type: 3}
   m_SplitScreen: 1
   m_MaintainAspectRatioInSplitScreen: 0
   m_FixedNumberOfSplitScreens: -1
@@ -1657,11 +1702,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d1c08b379f133e44ab6bd9475bfee1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  managerPlayerSkin: {fileID: 1779824143}
   spawnpos:
   - {fileID: 184414753}
   - {fileID: 552588909}
   - {fileID: 974537103}
   - {fileID: 1811224642}
+  prefabPlayer:
+  - {fileID: 5370540961573693932, guid: 0df609ad4d90d3c498e11c29b6e8b33d, type: 3}
+  - {fileID: 5370540961573693932, guid: fb02d8f97c5385e4cada5bedd47cb2c7, type: 3}
+  - {fileID: 5370540961573693932, guid: 09f715a9de21f994db0e7a29613e93cb, type: 3}
+  - {fileID: 5370540961573693932, guid: 579f517099807be43a4b9e30e425163f, type: 3}
   joinText: {fileID: 877184387}
   camInicial: {fileID: 1799668060}
 --- !u!1 &1799668060
@@ -1962,3 +2013,4 @@ SceneRoots:
   - {fileID: 383443977}
   - {fileID: 18325152}
   - {fileID: 1799668063}
+  - {fileID: 1691876369}
