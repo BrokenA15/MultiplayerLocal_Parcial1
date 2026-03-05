@@ -27,6 +27,8 @@ public class PlayerMovement : MonoBehaviour
     
     public bool gameOver = false;
     public bool gameWin = false;
+    
+   
     PlayerStats stats;
 
     void Awake()
@@ -37,6 +39,8 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         follow = virtualCamera.GetComponent<CinemachineThirdPersonFollow>();
+        
+        GameManager.instance.RegisterPlayer(this);
     }
 
     public void OnMove(InputValue action)
@@ -89,6 +93,8 @@ public class PlayerMovement : MonoBehaviour
         {
             follow.CameraDistance = distance;
         }
+
+        
     }
 
     private void OnTriggerEnter(Collider other)
@@ -96,6 +102,7 @@ public class PlayerMovement : MonoBehaviour
         if (other.CompareTag("Dead"))
         {
             gameOver = true;
+            GameManager.instance.CheckWinCondition();
         }
     }
 }
