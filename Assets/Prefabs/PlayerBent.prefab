@@ -426,8 +426,9 @@ MonoBehaviour:
   speed: 10
   rotationSpeed: 5
   verticalLookSpeed: 80
-  minAngle: 45
+  minAngle: 25
   maxAngle: 80
+  currentAngle: 45
   virtualCamera: {fileID: 490345334775535449}
   closeDistance: 6
   farDistance: 10
