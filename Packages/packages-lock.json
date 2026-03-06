@@ -93,7 +93,7 @@
     },
     "com.unity.render-pipelines.core": {
       "version": "17.0.4",
-      "depth": 2,
+      "depth": 1,
       "source": "builtin",
       "dependencies": {
         "com.unity.burst": "1.8.20",
@@ -132,9 +132,6 @@
     },
     "com.unity.shadergraph": {
       "version": "17.0.4",
-      "depth": 1,
-    "com.unity.shadergraph": {
-      "version": "17.0.4",
       "depth": 0,
       "source": "builtin",
       "dependencies": {
@@ -150,6 +147,26 @@
         "com.unity.mathematics": "1.2.1",
         "com.unity.modules.imgui": "1.0.0",
         "com.unity.settings-manager": "1.0.3"
+      },
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.test-framework": {
+      "version": "1.6.0",
+      "depth": 3,
+      "source": "builtin",
+      "dependencies": {
+        "com.unity.ext.nunit": "2.0.3",
+        "com.unity.modules.imgui": "1.0.0",
+        "com.unity.modules.jsonserialize": "1.0.0"
+      }
+    },
+    "com.unity.test-framework.performance": {
+      "version": "3.2.0",
+      "depth": 3,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.test-framework": "1.1.33",
+        "com.unity.modules.jsonserialize": "1.0.0"
       },
       "url": "https://packages.unity.com"
     },
@@ -419,5 +436,4 @@
       }
     }
   }
-}
 }
