@@ -6,6 +6,12 @@ public class PlayerController : NetworkBehaviour
 {
 
     public TMP_Text textoDelbug;
+    private int score = 0;
+    public NetworkVariable<int> hp = new NetworkVariable<int> (0);
+    public GameObject bullet;
+
+    [SerializeField]
+    private float speedBullet = 100;
 
     void Start()
     {
@@ -24,11 +30,14 @@ public class PlayerController : NetworkBehaviour
         }
         ShootClientRPC();
         ShootServerRPC();
+
+        hp.Value = score;
     }
 
-    // Update is called once per frame
+   
     void Update()
     {
+        textoDelbug.text = hp.Value.ToString();
         if (!IsOwner) return;
 
         if (IsClient)
@@ -38,13 +47,40 @@ public class PlayerController : NetworkBehaviour
             float speed = 10 * Time.deltaTime;
             transform.Translate(new Vector3(x * speed, y * speed));
 
+            if(Input.GetKeyDown(KeyCode.Space))
+            {
+                score++; 
+                ShootClientRPC();//Agregado de la clase 20/06/26 NIGGA
+                
+            }
         }
+                hp.Value = score;
+        
     }
 
-    [Rpc(SendTo.ClientsAndHost)]
+    //New shit 2
+    private void OnTriggerEnter(Colider other)
+    {
+        if (!IsOwner) return;
+
+        if (other.tag == "Bullet");
+        {
+            hp.Value -= 20;
+            if (hp.Value <= 0)
+            {
+                hp.Value = 0;
+            }
+    }
+
+    //[Rpc(SendTo.ClientsAndHost)]
+    [Rpc(SendTo.Server)]
     public void ShootClientRPC()
     {
         textoDelbug.text = "Shoot Client";
+
+        //Nuevo lol 
+        GameObject b = Instantiate(bullet, new Vector3(transform.position.x, transform.position.y + 1, transform.position.z), Quaternion.identity);
+        b.GetComponent<Rigidbody>().AddForce(Vector3.right * speedBullet * Time.deltaTime);
     }
 
     [Rpc(SendTo.Server)]
