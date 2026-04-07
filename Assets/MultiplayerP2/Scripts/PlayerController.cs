@@ -59,7 +59,7 @@ public class PlayerController : NetworkBehaviour
     }
 
     //New shit 2
-    private void OnTriggerEnter(Colider other)
+    private void OnTriggerEnter(Collider other)
     {
         if (!IsOwner) return;
 
@@ -70,6 +70,7 @@ public class PlayerController : NetworkBehaviour
             {
                 hp.Value = 0;
             }
+        }
     }
 
     //[Rpc(SendTo.ClientsAndHost)]
