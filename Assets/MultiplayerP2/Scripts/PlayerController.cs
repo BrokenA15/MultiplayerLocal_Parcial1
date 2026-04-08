@@ -50,7 +50,7 @@ public class PlayerController : NetworkBehaviour
             if(Input.GetKeyDown(KeyCode.Space))
             {
                 score++; 
-                ShootClientRPC();//Agregado de la clase 20/06/26 NIGGA
+                ShootClientRPC();// NIGGA
                 
             }
         }
