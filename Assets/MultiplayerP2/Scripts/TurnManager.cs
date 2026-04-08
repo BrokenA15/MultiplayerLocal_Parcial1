@@ -1,31 +1,39 @@
 using UnityEngine;
 using Unity.Netcode;
 using TMPro;
+using System.Linq;
 
 public class TurnManager : NetworkBehaviour
 {
-    public int turn;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public static TurnManager Instance;
+
+    public NetworkVariable<ulong> currentTurn = new NetworkVariable<ulong>();
+
+    public override void OnNetworkSpawn()
     {
-        if(IsOwner)
+        if (Instance == null)
+            Instance = this;
+
+        if (IsServer)
         {
-            turn = 0;
+            currentTurn.Value = NetworkManager.Singleton.ConnectedClientsIds.First();
         }
+        Debug.Log("Turno actual: " + currentTurn.Value);    
     }
 
-    // Update is called once per frame
-    void Update()
+    public bool IsMyTurn(ulong clientId)
     {
-        if (turn == 0)
-        {
+        return currentTurn.Value == clientId;
+    }
 
-        }
-        else if (turn == 1)
-        {
+    [Rpc(SendTo.Server)]
+    public void EndTurnServerRpc()
+    {
+        var clients = NetworkManager.Singleton.ConnectedClientsIds.ToList();
 
-        }
+        int currentIndex = clients.IndexOf(currentTurn.Value);
+        int nextIndex = (currentIndex + 1) % clients.Count;
 
-
+        currentTurn.Value = clients[nextIndex];
     }
 }

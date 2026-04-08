@@ -1,20 +1,19 @@
 using UnityEngine;
 using Unity.Netcode;
 using TMPro;
+using System.Linq;
 
 public class PlayerController : NetworkBehaviour
 {
 
     public TMP_Text textoDelbug;
     private int score = 0;
-    public NetworkVariable<int> hp = new NetworkVariable<int> (0);
-    public GameObject bullet;
 
-    [SerializeField]
-    private float speedBullet = 100;
+    private TurnManager turnManager;
 
     void Start()
     {
+        turnManager = FindFirstObjectByType<TurnManager>();        
         textoDelbug = GameObject.Find("Textito").GetComponent<TMP_Text>();
         if (NetworkManager.Singleton.IsHost)
         {
@@ -28,18 +27,19 @@ public class PlayerController : NetworkBehaviour
         {
             Debug.Log("sos el cliente");
         }
-        ShootClientRPC();
-        ShootServerRPC();
-
-        hp.Value = score;
     }
-
    
     void Update()
     {
-        textoDelbug.text = hp.Value.ToString();
-        if (!IsOwner) return;
+        textoDelbug.text = 
+            TurnManager.Instance.currentTurn.Value == 0 
+                ? "Turno: Host (Jugador 1)" 
+                : "Turno: Cliente (Jugador 2)";
+        
+        if (!IsOwner) return;   
 
+        if (!TurnManager.Instance.IsMyTurn(OwnerClientId)) return;
+            
         if (IsClient)
         {
             float x = Input.GetAxis("Horizontal");
@@ -49,45 +49,8 @@ public class PlayerController : NetworkBehaviour
 
             if(Input.GetKeyDown(KeyCode.Space))
             {
-                score++; 
-                ShootClientRPC();// NIGGA
-                
+                TurnManager.Instance.EndTurnServerRpc();
             }
-        }
-                hp.Value = score;
-        
-    }
-
-    //New shit 2
-    private void OnTriggerEnter(Collider other)
-    {
-        if (!IsOwner) return;
-
-        if (other.tag == "Bullet");
-        {
-            hp.Value -= 20;
-            if (hp.Value <= 0)
-            {
-                hp.Value = 0;
-            }
-        }
-    }
-
-    //[Rpc(SendTo.ClientsAndHost)]
-    [Rpc(SendTo.Server)]
-    public void ShootClientRPC()
-    {
-        textoDelbug.text = "Shoot Client";
-
-        //Nuevo lol 
-        GameObject b = Instantiate(bullet, new Vector3(transform.position.x, transform.position.y + 1, transform.position.z), Quaternion.identity);
-        b.GetComponent<Rigidbody>().AddForce(Vector3.right * speedBullet * Time.deltaTime);
-    }
-
-    [Rpc(SendTo.Server)]
-    public void ShootServerRPC()
-    {
-        textoDelbug.text = "Shoot Server";
-
+        }   
     }
 }
