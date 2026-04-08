@@ -1,6 +1,7 @@
 using UnityEngine;
 using Unity.Netcode;
 
+
 public class Projectile : NetworkBehaviour
 {
     private Rigidbody rb;
@@ -38,10 +39,17 @@ public class Projectile : NetworkBehaviour
 
         NetworkObject netObj = collision.gameObject.GetComponent<NetworkObject>();
 
-        // Ignorar al que disparó
         if (netObj != null && netObj.OwnerClientId == ownerId)
             return;
 
-        NetworkObject.Despawn();
+        PlayerController player = collision.gameObject.GetComponent<PlayerController>();
+        if (player != null)
+        {
+            player.TakeDamage(20); 
+        }
+        
+
+        if (NetworkObject != null && NetworkObject.IsSpawned)
+            NetworkObject.Despawn();
     }
 }
