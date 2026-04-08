@@ -1,0 +1,437 @@
+<?xml version="1.0" encoding="utf-8"?>
+<COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <asset>
+    <contributor>
+      <author>Centrixe</author>
+      <authoring_tool>OpenCOLLADA for 3ds Max;  Version: 1.6;  Revision: 68</authoring_tool>
+    </contributor>
+    <created>2019-08-25T20:08:34</created>
+    <modified>2019-08-25T20:08:34</modified>
+    <unit name="inch" meter="0.0254"/>
+    <up_axis>Z_UP</up_axis>
+  </asset>
+  <library_effects>
+    <effect id="ShaderfxShader2">
+      <profile_COMMON>
+        <newparam sid="alp_whip_001_col_png-surface">
+          <surface type="2D">
+            <init_from>alp_whip_001_col_png</init_from>
+          </surface>
+        </newparam>
+        <newparam sid="alp_whip_001_col_png-sampler">
+          <sampler2D>
+            <source>alp_whip_001_col_png-surface</source>
+          </sampler2D>
+        </newparam>
+        <technique sid="common">
+          <blinn>
+            <emission>
+              <color>0 0 0 1</color>
+            </emission>
+            <ambient>
+              <color>0.588 0.588 0.588 1</color>
+            </ambient>
+            <diffuse>
+              <texture texture="alp_whip_001_col_png-sampler" texcoord="CHANNEL1"/>
+            </diffuse>
+            <specular>
+              <color>0 0 0 1</color>
+            </specular>
+            <shininess>
+              <float>10</float>
+            </shininess>
+            <reflective>
+              <color>0 0 0 1</color>
+            </reflective>
+            <transparent opaque="A_ONE">
+              <texture texture="alp_whip_001_col_png-sampler" texcoord="CHANNEL1"/>
+            </transparent>
+            <transparency>
+              <float>1</float>
+            </transparency>
+          </blinn>
+        </technique>
+      </profile_COMMON>
+      <extra>
+        <technique profile="OpenCOLLADA3dsMax">
+          <extended_shader>
+            <opacity_type sid="opacity_type" type="int">0</opacity_type>
+            <falloff_type sid="falloff_type" type="int">0</falloff_type>
+            <falloff sid="falloff" type="float">0</falloff>
+            <index_of_refraction sid="index_of_refraction" type="float">1.5</index_of_refraction>
+            <wire_size sid="wire_size" type="float">1</wire_size>
+            <wire_units sid="wire_units" type="int">0</wire_units>
+            <apply_reflection_dimming sid="apply_reflection_dimming" type="bool">0</apply_reflection_dimming>
+            <dim_level sid="dim_level" type="float">0</dim_level>
+            <reflection_level sid="reflection_level" type="float">3</reflection_level>
+          </extended_shader>
+          <shader>
+            <ambient_diffuse_texture_lock sid="ambient_diffuse_texture_lock" type="bool">1</ambient_diffuse_texture_lock>
+            <ambient_diffuse_lock sid="ambient_diffuse_lock" type="bool">1</ambient_diffuse_lock>
+            <diffuse_specular_lock sid="diffuse_specular_lock" type="bool">0</diffuse_specular_lock>
+            <use_self_illum_color sid="use_self_illum_color" type="bool">0</use_self_illum_color>
+            <self_illumination sid="self_illumination" type="float">0</self_illumination>
+            <specular_level sid="specular_level" type="float">0</specular_level>
+            <soften sid="soften" type="float">0.1</soften>
+          </shader>
+        </technique>
+      </extra>
+    </effect>
+  </library_effects>
+  <library_materials>
+    <material id="ShaderfxShader2-material" name="ShaderfxShader2">
+      <instance_effect url="#ShaderfxShader2"/>
+    </material>
+  </library_materials>
+  <library_geometries>
+    <geometry id="geom-Whip_VIS_O_OBJ_NSCShape" name="Whip_VIS_O_OBJ_NSCShape">
+      <mesh>
+        <source id="geom-Whip_VIS_O_OBJ_NSCShape-positions">
+          <float_array id="geom-Whip_VIS_O_OBJ_NSCShape-positions-array" count="114">-0.00754663 -1.70856 3.78773 -0.00746222 -1.3796 3.19803 -0.00754675 1.71265 3.78773 -0.00746234 1.38367 3.19803 -0.00737769 -1.04093 2.60833 -0.00737769 1.04497 2.60833 -0.00729327 -0.627567 2.01863 -0.00729326 0.631589 2.01863 -0.00768296 -2.02865 4.65409 -0.00768279 2.03272 4.65409 -0.0105884 2.03251 16.4523 -0.0105879 -2.02868 16.4523 -0.00972124 2.03258 13.3379 -0.00972166 -2.02867 13.3379 -0.00885173 2.03265 10.3021 0.00539071 -2.02866 10.3012 -0.00822651 2.03269 7.43919 -0.00822689 -2.02865 7.43919 -0.0122076 2.03237 22.7068 -0.0122095 -2.02871 22.7068 -0.0114546 2.03243 19.5816 -0.0114547 -2.0287 19.5816 -0.0128473 2.03232 28.957 -0.0128465 -2.02872 28.957 -0.012621 2.03234 25.8319 -0.0126192 -2.02872 25.8319 -0.0117154 2.03241 35.2076 -0.0117154 -2.0287 35.2076 -0.0125168 2.03235 32.0817 -0.0125152 -2.02872 32.0817 -0.00734755 2.03274 41.4643 -0.0073492 -2.02863 41.4643 -0.00951639 2.03259 38.3345 -0.00951805 -2.02867 38.3345 -0.00470823 2.03281 44.5521 -0.00470849 -2.02858 44.5521 -0.00147418 2.03303 46.7054 -0.00147418 -2.02853 46.7054</float_array>
+          <technique_common>
+            <accessor source="#geom-Whip_VIS_O_OBJ_NSCShape-positions-array" count="38" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="geom-Whip_VIS_O_OBJ_NSCShape-normals">
+          <float_array id="geom-Whip_VIS_O_OBJ_NSCShape-normals-array" count="114">1 3.05176e-5 1.76191e-4 1 3.05176e-5 1.50084e-4 1 3.05176e-5 1.50084e-4 1 3.05176e-5 1.76191e-4 1 3.05176e-5 1.4329e-4 0.999999 8.76854e-4 -0.001037149 0.999999 8.76854e-4 -0.001037149 0.9999983 0.001753707 1.81286e-4 0.9999983 0.001753707 1.81286e-4 0.9999986 8.76854e-4 0.001455062 0.9999986 8.76854e-4 0.001455062 1 3.05176e-5 2.77519e-4 1 3.05176e-5 2.77519e-4 1 3.05176e-5 2.58923e-4 1 3.05176e-5 2.58923e-4 1 3.05176e-5 1.86443e-4 1 3.05176e-5 1.86443e-4 1 3.05176e-5 1.02103e-4 1 3.05176e-5 1.02103e-4 1 3.05176e-5 -3.88324e-5 1 3.05176e-5 -3.88324e-5 1 3.05176e-5 -1.8096e-4 1 3.05176e-5 -1.8096e-4 0.9999999 3.05176e-5 -4.7946e-4 0.9999999 3.05176e-5 -4.7946e-4 0.9999998 3.05176e-5 -6.97613e-4 0.9999998 3.05176e-5 -6.97613e-4 0.9999998 3.05176e-5 -7.73907e-4 0.9999998 3.05176e-5 -7.73907e-4 0.9999993 3.05325e-5 -0.001178362 0.9999993 3.05325e-5 -0.001178362 0.9999988 3.05325e-5 -0.001501815 0.9999988 3.05325e-5 -0.001501815 1 3.05176e-5 1.4329e-4 1 3.05176e-5 1.4329e-4 1 3.05176e-5 1.43051e-4 1 3.05176e-5 1.4329e-4 1 3.05176e-5 1.43051e-4</float_array>
+          <technique_common>
+            <accessor source="#geom-Whip_VIS_O_OBJ_NSCShape-normals-array" count="38" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="geom-Whip_VIS_O_OBJ_NSCShape-map-2">
+          <float_array id="geom-Whip_VIS_O_OBJ_NSCShape-map-2-array" count="114">1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1</float_array>
+          <technique_common>
+            <accessor source="#geom-Whip_VIS_O_OBJ_NSCShape-map-2-array" count="38" stride="3">
+              <param name="R" type="float"/>
+              <param name="G" type="float"/>
+              <param name="B" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="geom-Whip_VIS_O_OBJ_NSCShape-map0">
+          <float_array id="geom-Whip_VIS_O_OBJ_NSCShape-map0-array" count="114">0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608</float_array>
+          <technique_common>
+            <accessor source="#geom-Whip_VIS_O_OBJ_NSCShape-map0-array" count="38" stride="3">
+              <param name="R" type="float"/>
+              <param name="G" type="float"/>
+              <param name="B" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="geom-Whip_VIS_O_OBJ_NSCShape-map1">
+          <float_array id="geom-Whip_VIS_O_OBJ_NSCShape-map1-array" count="114">0.09387207 0.7645264 0 0.06298828 0.7645264 0 0.09387207 0.9784393 0 0.06298828 0.9784393 0 0.03253174 0.7645264 0 0.03253174 0.9784393 0 0.001907349 0.7645264 0 0.001907349 0.9784393 0 0.1275635 0.7645264 0 0.1275635 0.9784393 0 0.6733398 0.9784393 0 0.6733398 0.7645264 0 0.5366211 0.9784393 0 0.5366211 0.7645264 0 0.4003906 0.9784393 0 0.4003906 0.7645264 0 0.263916 0.9784393 0 0.263916 0.7645264 0 0.9458008 0.9784393 0 0.9458008 0.7645264 0 0.8095703 0.9784393 0 0.8095703 0.7645264 0 1.21875 0.9784393 0 1.21875 0.7645264 0 1.082031 0.9784393 0 1.082031 0.7645264 0 1.491211 0.9784393 0 1.491211 0.7645264 0 1.355469 0.9784393 0 1.355469 0.7645264 0 1.764648 0.9784393 0 1.764648 0.7645264 0 1.62793 0.9784393 0 1.62793 0.7645264 0 1.900391 0.9784393 0 1.900391 0.7645264 0 2.001953 0.9784088 0 2.001953 0.7646484 0</float_array>
+          <technique_common>
+            <accessor source="#geom-Whip_VIS_O_OBJ_NSCShape-map1-array" count="38" stride="3">
+              <param name="S" type="float"/>
+              <param name="T" type="float"/>
+              <param name="P" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <vertices id="geom-Whip_VIS_O_OBJ_NSCShape-vertices">
+          <input semantic="POSITION" source="#geom-Whip_VIS_O_OBJ_NSCShape-positions"/>
+        </vertices>
+        <triangles material="ShaderfxShader2" count="36">
+          <input semantic="VERTEX" source="#geom-Whip_VIS_O_OBJ_NSCShape-vertices" offset="0"/>
+          <input semantic="NORMAL" source="#geom-Whip_VIS_O_OBJ_NSCShape-normals" offset="1"/>
+          <input semantic="COLOR" source="#geom-Whip_VIS_O_OBJ_NSCShape-map0" offset="2" set="0"/>
+          <input semantic="TEXCOORD" source="#geom-Whip_VIS_O_OBJ_NSCShape-map1" offset="3" set="0"/>
+          <p>9 0 9 9 0 1 0 0 2 2 2 2 8 3 8 8 0 1 0 0 9 0 9 9 0 1 0 0 1 4 1 1 2 2 2 2 9 0 9 9 17 5 17 17 8 3 8 8 16 6 16 16 17 5 17 17 9 0 9 9 16 6 16 16 15 7 15 15 17 5 17 17 14 8 14 14 15 7 15 15 16 6 16 16 14 8 14 14 13 9 13 13 15 7 15 15 12 10 12 12 13 9 13 13 14 8 14 14 12 10 12 12 11 11 11 11 13 9 13 13 10 12 10 10 11 11 11 11 12 10 12 12 10 12 10 10 21 13 21 21 11 11 11 11 20 14 20 20 21 13 21 21 10 12 10 10 20 14 20 20 19 15 19 19 21 13 21 21 18 16 18 18 19 15 19 19 20 14 20 20 18 16 18 18 25 17 25 25 19 15 19 19 24 18 24 24 25 17 25 25 18 16 18 18 24 18 24 24 23 19 23 23 25 17 25 25 22 20 22 22 23 19 23 23 24 18 24 24 22 20 22 22 29 21 29 29 23 19 23 23 28 22 28 28 29 21 29 29 22 20 22 22 28 22 28 28 27 23 27 27 29 21 29 29 26 24 26 26 27 23 27 27 28 22 28 28 26 24 26 26 33 25 33 33 27 23 27 27 32 26 32 32 33 25 33 33 26 24 26 26 32 26 32 32 31 27 31 31 33 25 33 33 30 28 30 30 31 27 31 31 32 26 32 32 30 28 30 30 35 29 35 35 31 27 31 31 34 30 34 34 35 29 35 35 30 28 30 30 34 30 34 34 37 31 37 37 35 29 35 35 36 32 36 36 37 31 37 37 34 30 34 34 1 4 1 1 4 33 4 4 3 34 3 3 2 2 2 2 1 4 1 1 3 34 3 3 4 33 4 4 6 35 6 6 5 36 5 5 3 34 3 3 4 33 4 4 5 36 5 5 5 36 5 5 6 35 6 6 7 37 7 7</p>
+        </triangles>
+      </mesh>
+    </geometry>
+  </library_geometries>
+  <library_controllers>
+    <controller id="geom-Whip_VIS_O_OBJ_NSCShape-skin1">
+      <skin source="#geom-Whip_VIS_O_OBJ_NSCShape">
+        <bind_shape_matrix>1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</bind_shape_matrix>
+        <source id="geom-Whip_VIS_O_OBJ_NSCShape-skin1-joints">
+          <Name_array id="geom-Whip_VIS_O_OBJ_NSCShape-skin1-joints-array" count="18">joint0 joint1 joint2 joint3 joint4 joint5 joint6 joint7 joint8 joint9 joint10 joint11 joint12 joint13 joint14 joint15 joint16 joint17</Name_array>
+          <technique_common>
+            <accessor source="#geom-Whip_VIS_O_OBJ_NSCShape-skin1-joints-array" count="18" stride="1">
+              <param name="JOINT" type="name"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="geom-Whip_VIS_O_OBJ_NSCShape-skin1-bind_poses">
+          <float_array id="geom-Whip_VIS_O_OBJ_NSCShape-skin1-bind_poses-array" count="288">-1.78814e-7 -1 -1.06581e-14 0 -1.19209e-7 5.96047e-8 1 0 -1 2.38419e-7 -5.96046e-8 0 0 0 0 1 -1.41561e-7 -3.72529e-9 1 -2.46379 -2.63678e-15 1 1.86265e-8 0.004370204 -1 4.16334e-16 -1.11759e-7 2.7535e-7 0 0 0 1 -1.19209e-7 7.45058e-9 1 -3.78786 -1.86265e-9 1 6.98492e-9 0.004370223 -1 1.86264e-9 -1.3411e-7 5.08e-7 0 0 0 1 -1.11759e-7 7.21775e-9 1 -10.0966 -1.86265e-9 1 7.21775e-9 0.004370178 -1 1.86264e-9 -1.2666e-7 1.27884e-6 0 0 0 1 -1.11759e-7 7.21775e-9 1 -16.3466 -1.86265e-9 1 7.21775e-9 0.004370132 -1 1.86264e-9 -1.2666e-7 2.07047e-6 0 0 0 1 -1.11759e-7 7.21775e-9 1 -22.5966 -1.86265e-9 1 7.21775e-9 0.004370087 -1 1.86264e-9 -1.2666e-7 2.86209e-6 0 0 0 1 -1.11759e-7 7.21775e-9 1 -28.8466 -1.86265e-9 1 7.21775e-9 0.004370042 -1 1.86264e-9 -1.2666e-7 3.65372e-6 0 0 0 1 -1.11759e-7 7.21775e-9 1 -35.0966 -1.86265e-9 1 7.21775e-9 0.004369996 -1 1.86264e-9 -1.2666e-7 4.44534e-6 0 0 0 1 -1.11759e-7 7.21775e-9 1 -41.3466 -1.86265e-9 1 7.21775e-9 0.004369951 -1 1.86264e-9 -1.2666e-7 5.23696e-6 0 0 0 1 -1.11759e-7 7.21775e-9 1 -48.10411 -1.86265e-9 1 7.21775e-9 0.004369902 -1 1.86264e-9 -1.2666e-7 6.09287e-6 0 0 0 1 -1.11759e-7 7.21775e-9 1 -50.22661 -1.86265e-9 1 7.21775e-9 0.004369887 -1 1.86264e-9 -1.2666e-7 6.3617e-6 0 0 0 1 1.86265e-9 1 2.43654e-9 0.004370149 7.27596e-9 2.29466e-9 1 -41.3466 1 -1.86265e-9 7.33417e-9 -3.03251e-7 0 0 0 1 1.86265e-9 1 2.43654e-9 0.004370164 7.27596e-9 2.29466e-9 1 -35.0966 1 -1.86265e-9 7.33417e-9 -2.57413e-7 0 0 0 1 1.86265e-9 1 2.43654e-9 0.004370179 7.27596e-9 2.29466e-9 1 -28.8466 1 -1.86265e-9 7.33417e-9 -2.11574e-7 0 0 0 1 1.86265e-9 1 2.43654e-9 0.004370195 7.27596e-9 2.29466e-9 1 -22.5966 1 -1.86265e-9 7.33417e-9 -1.65735e-7 0 0 0 1 1.86265e-9 1 2.43654e-9 0.00437021 7.27596e-9 2.29466e-9 1 -16.3466 1 -1.86265e-9 7.33417e-9 -1.19897e-7 0 0 0 1 1.86265e-9 1 2.43654e-9 0.004370225 7.21775e-9 2.29375e-9 1 -10.0966 1 -1.86265e-9 7.27596e-9 -7.34706e-8 0 0 0 1 1.86265e-9 1 2.43654e-9 0.00437024 7.21775e-9 2.29375e-9 1 -3.78786 1 -1.86265e-9 7.27596e-9 -2.75684e-8 0 0 0 1</float_array>
+          <technique_common>
+            <accessor source="#geom-Whip_VIS_O_OBJ_NSCShape-skin1-bind_poses-array" count="18" stride="16">
+              <param name="TRANSFORM" type="float4x4"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="geom-Whip_VIS_O_OBJ_NSCShape-skin1-weights">
+          <float_array id="geom-Whip_VIS_O_OBJ_NSCShape-skin1-weights-array" count="95">1 0.811141 0.188859 0.811141 0.188859 0.0407544 0.39793 0.461316 0.0999997 0.0407544 0.39793 0.461316 0.0999997 0.199529 0.48899 0.298981 0.0125 0.199529 0.48899 0.298981 0.0125 0.415046 0.481274 0.10368 0.415046 0.481274 0.10368 0.6105899 0.373754 0.0156561 0.6105899 0.373754 0.0156561 0.0375 0.4 0.4625 0.1 0.0375 0.4 0.4625 0.1 0.2 0.4875 0.3 0.0125 0.2 0.4875 0.3 0.0125 0.0375 0.4 0.4625 0.1 0.0375 0.4 0.4625 0.1 0.2 0.4875 0.3 0.0125 0.2 0.4875 0.3 0.0125 0.0375 0.4 0.461538 0.100962 0.0375 0.4 0.461538 0.100962 0.2 0.4875 0.3 0.0125 0.2 0.4875 0.3 0.0125 0.437499 0.562501 0.437501 0.562499 0.1875 0.497115 0.315385 0.1875 0.497115 0.315385 0.1875 0.8125 0.1875 0.8125</float_array>
+          <technique_common>
+            <accessor source="#geom-Whip_VIS_O_OBJ_NSCShape-skin1-weights-array" count="95" stride="1">
+              <param name="WEIGHT" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <joints>
+          <input semantic="JOINT" source="#geom-Whip_VIS_O_OBJ_NSCShape-skin1-joints"/>
+          <input semantic="INV_BIND_MATRIX" source="#geom-Whip_VIS_O_OBJ_NSCShape-skin1-bind_poses"/>
+        </joints>
+        <vertex_weights count="38">
+          <input semantic="JOINT" source="#geom-Whip_VIS_O_OBJ_NSCShape-skin1-joints" offset="0"/>
+          <input semantic="WEIGHT" source="#geom-Whip_VIS_O_OBJ_NSCShape-skin1-weights" offset="1"/>
+          <vcount>1 1 1 1 1 1 1 1 2 2 4 4 4 4 3 3 3 3 4 4 4 4 4 4 4 4 4 4 4 4 2 2 3 3 2 2 1 1</vcount>
+          <v>17 0 17 0 17 0 17 0 17 0 17 0 17 0 17 0 17 1 16 2 17 3 16 4 17 5 16 6 15 7 14 8 17 9 16 10 15 11 14 12 17 13 16 14 15 15 14 16 17 17 16 18 15 19 14 20 17 21 16 22 15 23 17 24 16 25 15 26 17 27 16 28 15 29 17 30 16 31 15 32 16 33 15 34 14 35 13 36 16 37 15 38 14 39 13 40 16 41 15 42 14 43 13 44 16 45 15 46 14 47 13 48 15 49 14 50 13 51 12 52 15 53 14 54 13 55 12 56 15 57 14 58 13 59 12 60 15 61 14 62 13 63 12 64 14 65 13 66 12 67 11 68 14 69 13 70 12 71 11 72 14 73 13 74 12 75 11 76 14 77 13 78 12 79 11 80 12 81 11 82 12 83 11 84 13 85 12 86 11 87 13 88 12 89 11 90 12 91 11 92 12 93 11 94 11 0 11 0</v>
+        </vertex_weights>
+      </skin>
+    </controller>
+  </library_controllers>
+  <library_lights>
+    <light id="EnvironmentAmbientLight" name="EnvironmentAmbientLight">
+      <technique_common>
+        <ambient>
+          <color>0 0 0</color>
+        </ambient>
+      </technique_common>
+    </light>
+  </library_lights>
+  <library_images>
+    <image id="alp_whip_001_col_png">
+      <init_from>./images/Whip/alp_whip_001_col.png</init_from>
+    </image>
+  </library_images>
+  <library_visual_scenes>
+    <visual_scene id="MaxScene">
+      <node name="EnvironmentAmbientLight">
+        <instance_light url="#EnvironmentAmbientLight"/>
+      </node>
+      <node id="node-Have" name="Have" sid="joint0" type="JOINT">
+        <rotate>-0.5773502 0.5773503 0.5773503 -120</rotate>
+        <node id="node-Plasmawhip1" name="Plasmawhip1" sid="joint1" type="JOINT">
+          <translate>0.00437025 2.46379 -1.47895e-7</translate>
+          <rotate>-1.22935e-7 -8.56817e-8 -1 -90</rotate>
+          <node id="node-Plasmawhip2" name="Plasmawhip2" sid="joint2" type="JOINT">
+            <translate>1.32407 2.468e-8 -1.47976e-7</translate>
+            <node id="node-Plasmawhip3" name="Plasmawhip3" sid="joint3" type="JOINT">
+              <translate>6.30874 4.33065e-8 -8.46068e-7</translate>
+              <node id="node-Plasmawhip4" name="Plasmawhip4" sid="joint4" type="JOINT">
+                <translate>6.250001 4.56348e-8 -7.91624e-7</translate>
+                <node id="node-Plasmawhip5" name="Plasmawhip5" sid="joint5" type="JOINT">
+                  <translate>6.25 4.51691e-8 -7.91624e-7</translate>
+                  <node id="node-Plasmawhip6" name="Plasmawhip6" sid="joint6" type="JOINT">
+                    <translate>6.250002 4.51691e-8 -7.91624e-7</translate>
+                    <node id="node-Plasmawhip7" name="Plasmawhip7" sid="joint7" type="JOINT">
+                      <translate>6.25 4.51691e-8 -7.91624e-7</translate>
+                      <node id="node-Plasmawhip8" name="Plasmawhip8" sid="joint8" type="JOINT">
+                        <translate>6.25 4.51691e-8 -7.91624e-7</translate>
+                        <node id="node-Attach" name="Attach" sid="joint9" type="JOINT">
+                          <translate>6.757507 4.88944e-8 -8.55905e-7</translate>
+                          <node id="node-Plasmawhip9" name="Plasmawhip9" sid="joint10" type="JOINT">
+                            <translate>2.122498 1.53668e-8 -2.68835e-7</translate>
+                            <extra>
+                              <technique profile="OpenCOLLADA">
+                                <cast_shadows sid="cast_shadows" type="bool">1</cast_shadows>
+                                <receive_shadows sid="receive_shadows" type="bool">1</receive_shadows>
+                                <primary_visibility sid="primary_visibility" type="bool">1</primary_visibility>
+                                <secondary_visibility sid="secondary_visibility" type="bool">1</secondary_visibility>
+                              </technique>
+                            </extra>
+                          </node>
+                          <extra>
+                            <technique profile="OpenCOLLADA">
+                              <cast_shadows sid="cast_shadows" type="bool">1</cast_shadows>
+                              <receive_shadows sid="receive_shadows" type="bool">1</receive_shadows>
+                              <primary_visibility sid="primary_visibility" type="bool">1</primary_visibility>
+                              <secondary_visibility sid="secondary_visibility" type="bool">1</secondary_visibility>
+                            </technique>
+                          </extra>
+                        </node>
+                        <node id="node-PlasmawhipC8_BILLBOARDYAXISV__O_OBJ_O_HIR" name="PlasmawhipC8_BILLBOARDYAXISV__O_OBJ_O_HIR" sid="joint11" type="JOINT">
+                          <rotate>0.7071068 0.7071068 -4.27951e-8 -180</rotate>
+                          <extra>
+                            <technique profile="OpenCOLLADA">
+                              <cast_shadows sid="cast_shadows" type="bool">1</cast_shadows>
+                              <receive_shadows sid="receive_shadows" type="bool">1</receive_shadows>
+                              <primary_visibility sid="primary_visibility" type="bool">1</primary_visibility>
+                              <secondary_visibility sid="secondary_visibility" type="bool">1</secondary_visibility>
+                            </technique>
+                          </extra>
+                        </node>
+                        <extra>
+                          <technique profile="OpenCOLLADA">
+                            <cast_shadows sid="cast_shadows" type="bool">1</cast_shadows>
+                            <receive_shadows sid="receive_shadows" type="bool">1</receive_shadows>
+                            <primary_visibility sid="primary_visibility" type="bool">1</primary_visibility>
+                            <secondary_visibility sid="secondary_visibility" type="bool">1</secondary_visibility>
+                          </technique>
+                        </extra>
+                      </node>
+                      <node id="node-PlasmawhipC7_BILLBOARDYAXISV__O_OBJ_O_HIR" name="PlasmawhipC7_BILLBOARDYAXISV__O_OBJ_O_HIR" sid="joint12" type="JOINT">
+                        <rotate>0.7071068 0.7071068 -4.27951e-8 -180</rotate>
+                        <extra>
+                          <technique profile="OpenCOLLADA">
+                            <cast_shadows sid="cast_shadows" type="bool">1</cast_shadows>
+                            <receive_shadows sid="receive_shadows" type="bool">1</receive_shadows>
+                            <primary_visibility sid="primary_visibility" type="bool">1</primary_visibility>
+                            <secondary_visibility sid="secondary_visibility" type="bool">1</secondary_visibility>
+                          </technique>
+                        </extra>
+                      </node>
+                      <extra>
+                        <technique profile="OpenCOLLADA">
+                          <cast_shadows sid="cast_shadows" type="bool">1</cast_shadows>
+                          <receive_shadows sid="receive_shadows" type="bool">1</receive_shadows>
+                          <primary_visibility sid="primary_visibility" type="bool">1</primary_visibility>
+                          <secondary_visibility sid="secondary_visibility" type="bool">1</secondary_visibility>
+                        </technique>
+                      </extra>
+                    </node>
+                    <node id="node-PlasmawhipC6_BILLBOARDYAXISV__O_OBJ_O_HIR" name="PlasmawhipC6_BILLBOARDYAXISV__O_OBJ_O_HIR" sid="joint13" type="JOINT">
+                      <rotate>0.7071068 0.7071068 -4.27951e-8 -180</rotate>
+                      <extra>
+                        <technique profile="OpenCOLLADA">
+                          <cast_shadows sid="cast_shadows" type="bool">1</cast_shadows>
+                          <receive_shadows sid="receive_shadows" type="bool">1</receive_shadows>
+                          <primary_visibility sid="primary_visibility" type="bool">1</primary_visibility>
+                          <secondary_visibility sid="secondary_visibility" type="bool">1</secondary_visibility>
+                        </technique>
+                      </extra>
+                    </node>
+                    <extra>
+                      <technique profile="OpenCOLLADA">
+                        <cast_shadows sid="cast_shadows" type="bool">1</cast_shadows>
+                        <receive_shadows sid="receive_shadows" type="bool">1</receive_shadows>
+                        <primary_visibility sid="primary_visibility" type="bool">1</primary_visibility>
+                        <secondary_visibility sid="secondary_visibility" type="bool">1</secondary_visibility>
+                      </technique>
+                    </extra>
+                  </node>
+                  <node id="node-PlasmawhipC5_BILLBOARDYAXISV__O_OBJ_O_HIR" name="PlasmawhipC5_BILLBOARDYAXISV__O_OBJ_O_HIR" sid="joint14" type="JOINT">
+                    <rotate>0.7071068 0.7071068 -4.27951e-8 -180</rotate>
+                    <extra>
+                      <technique profile="OpenCOLLADA">
+                        <cast_shadows sid="cast_shadows" type="bool">1</cast_shadows>
+                        <receive_shadows sid="receive_shadows" type="bool">1</receive_shadows>
+                        <primary_visibility sid="primary_visibility" type="bool">1</primary_visibility>
+                        <secondary_visibility sid="secondary_visibility" type="bool">1</secondary_visibility>
+                      </technique>
+                    </extra>
+                  </node>
+                  <extra>
+                    <technique profile="OpenCOLLADA">
+                      <cast_shadows sid="cast_shadows" type="bool">1</cast_shadows>
+                      <receive_shadows sid="receive_shadows" type="bool">1</receive_shadows>
+                      <primary_visibility sid="primary_visibility" type="bool">1</primary_visibility>
+                      <secondary_visibility sid="secondary_visibility" type="bool">1</secondary_visibility>
+                    </technique>
+                  </extra>
+                </node>
+                <node id="node-PlasmawhipC4_BILLBOARDYAXISV__O_OBJ_O_HIR" name="PlasmawhipC4_BILLBOARDYAXISV__O_OBJ_O_HIR" sid="joint15" type="JOINT">
+                  <rotate>0.7071068 0.7071068 -4.27951e-8 -180</rotate>
+                  <extra>
+                    <technique profile="OpenCOLLADA">
+                      <cast_shadows sid="cast_shadows" type="bool">1</cast_shadows>
+                      <receive_shadows sid="receive_shadows" type="bool">1</receive_shadows>
+                      <primary_visibility sid="primary_visibility" type="bool">1</primary_visibility>
+                      <secondary_visibility sid="secondary_visibility" type="bool">1</secondary_visibility>
+                    </technique>
+                  </extra>
+                </node>
+                <extra>
+                  <technique profile="OpenCOLLADA">
+                    <cast_shadows sid="cast_shadows" type="bool">1</cast_shadows>
+                    <receive_shadows sid="receive_shadows" type="bool">1</receive_shadows>
+                    <primary_visibility sid="primary_visibility" type="bool">1</primary_visibility>
+                    <secondary_visibility sid="secondary_visibility" type="bool">1</secondary_visibility>
+                  </technique>
+                </extra>
+              </node>
+              <node id="node-PlasmawhipC3_BILLBOARDYAXISV__O_OBJ_O_HIR" name="PlasmawhipC3_BILLBOARDYAXISV__O_OBJ_O_HIR" sid="joint16" type="JOINT">
+                <rotate>0.7071068 0.7071068 -4.27951e-8 -180</rotate>
+                <extra>
+                  <technique profile="OpenCOLLADA">
+                    <cast_shadows sid="cast_shadows" type="bool">1</cast_shadows>
+                    <receive_shadows sid="receive_shadows" type="bool">1</receive_shadows>
+                    <primary_visibility sid="primary_visibility" type="bool">1</primary_visibility>
+                    <secondary_visibility sid="secondary_visibility" type="bool">1</secondary_visibility>
+                  </technique>
+                </extra>
+              </node>
+              <extra>
+                <technique profile="OpenCOLLADA">
+                  <cast_shadows sid="cast_shadows" type="bool">1</cast_shadows>
+                  <receive_shadows sid="receive_shadows" type="bool">1</receive_shadows>
+                  <primary_visibility sid="primary_visibility" type="bool">1</primary_visibility>
+                  <secondary_visibility sid="secondary_visibility" type="bool">1</secondary_visibility>
+                </technique>
+              </extra>
+            </node>
+            <node id="node-PlasmawhipC2_BILLBOARDYAXISV__O_OBJ_O_HIR" name="PlasmawhipC2_BILLBOARDYAXISV__O_OBJ_O_HIR" sid="joint17" type="JOINT">
+              <rotate>0.7071068 0.7071068 -4.54293e-8 -180</rotate>
+              <extra>
+                <technique profile="OpenCOLLADA">
+                  <cast_shadows sid="cast_shadows" type="bool">1</cast_shadows>
+                  <receive_shadows sid="receive_shadows" type="bool">1</receive_shadows>
+                  <primary_visibility sid="primary_visibility" type="bool">1</primary_visibility>
+                  <secondary_visibility sid="secondary_visibility" type="bool">1</secondary_visibility>
+                </technique>
+              </extra>
+            </node>
+            <extra>
+              <technique profile="OpenCOLLADA">
+                <cast_shadows sid="cast_shadows" type="bool">1</cast_shadows>
+                <receive_shadows sid="receive_shadows" type="bool">1</receive_shadows>
+                <primary_visibility sid="primary_visibility" type="bool">1</primary_visibility>
+                <secondary_visibility sid="secondary_visibility" type="bool">1</secondary_visibility>
+              </technique>
+            </extra>
+          </node>
+          <extra>
+            <technique profile="OpenCOLLADA">
+              <cast_shadows sid="cast_shadows" type="bool">1</cast_shadows>
+              <receive_shadows sid="receive_shadows" type="bool">1</receive_shadows>
+              <primary_visibility sid="primary_visibility" type="bool">1</primary_visibility>
+              <secondary_visibility sid="secondary_visibility" type="bool">1</secondary_visibility>
+            </technique>
+          </extra>
+        </node>
+        <extra>
+          <technique profile="OpenCOLLADA">
+            <cast_shadows sid="cast_shadows" type="bool">1</cast_shadows>
+            <receive_shadows sid="receive_shadows" type="bool">1</receive_shadows>
+            <primary_visibility sid="primary_visibility" type="bool">1</primary_visibility>
+            <secondary_visibility sid="secondary_visibility" type="bool">1</secondary_visibility>
+          </technique>
+        </extra>
+      </node>
+      <node id="node-Whip_VIS_O_OBJ_NSCShape" name="Whip_VIS_O_OBJ_NSCShape">
+        <instance_controller url="#geom-Whip_VIS_O_OBJ_NSCShape-skin1">
+          <skeleton>#node-Have</skeleton>
+          <bind_material>
+            <technique_common>
+              <instance_material symbol="ShaderfxShader2" target="#ShaderfxShader2-material">
+                <bind_vertex_input semantic="CHANNEL1" input_semantic="TEXCOORD" input_set="0"/>
+                <bind_vertex_input semantic="CHANNEL1" input_semantic="TEXCOORD" input_set="0"/>
+              </instance_material>
+            </technique_common>
+          </bind_material>
+        </instance_controller>
+        <extra>
+          <technique profile="OpenCOLLADA">
+            <cast_shadows sid="cast_shadows" type="bool">1</cast_shadows>
+            <receive_shadows sid="receive_shadows" type="bool">1</receive_shadows>
+            <primary_visibility sid="primary_visibility" type="bool">1</primary_visibility>
+            <secondary_visibility sid="secondary_visibility" type="bool">1</secondary_visibility>
+          </technique>
+        </extra>
+      </node>
+    </visual_scene>
+  </library_visual_scenes>
+  <scene>
+    <instance_visual_scene url="#MaxScene"/>
+  </scene>
+</COLLADA>
