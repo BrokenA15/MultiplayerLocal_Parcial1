@@ -8,15 +8,25 @@ public class PlayerShooting : NetworkBehaviour
 
     public float minForce = 5f;
     public float maxForce = 20f;
-
     public float force = 10f;
     public float angle = 45f;
+
+    // --- SEGURO ANTI-SPAM ---
+    private bool yaDisparoEnEsteTurno = false;
 
     void Update()
     {
         if (!IsOwner) return;
 
-        if (TurnManager.Instance != null && !TurnManager.Instance.IsMyTurn(OwnerClientId)) return;
+        // Si ya disparó, bloqueamos para evitar múltiples balas antes del cambio de turno
+        if (yaDisparoEnEsteTurno) return;
+
+        // Verificamos turno y reseteamos el seguro si ya no es nuestro turno
+        if (TurnManager.Instance != null && !TurnManager.Instance.IsMyTurn(OwnerClientId))
+        {
+            yaDisparoEnEsteTurno = false;
+            return;
+        }
 
         HandleAim();
         HandleShoot();
@@ -49,13 +59,20 @@ public class PlayerShooting : NetworkBehaviour
 
     void HandleShoot()
     {
-        if (Input.GetKeyDown(KeyCode.Return))
+        // Solo permitimos disparar si la tecla se presiona y el seguro está libre
+        if (Input.GetKeyDown(KeyCode.Return) && !yaDisparoEnEsteTurno)
         {
+            yaDisparoEnEsteTurno = true; // Bloqueo inmediato
+
             ShootServerRpc(shootPoint.position, shootPoint.right, force);
+
+            if (TurnManager.Instance != null)
+            {
+                TurnManager.Instance.EndTurnServerRpc();
+            }
         }
     }
 
-    // ðŸ”¥ SERVER: crea la bala
     [Rpc(SendTo.Server)]
     void ShootServerRpc(Vector3 pos, Vector3 dir, float force)
     {
@@ -70,17 +87,21 @@ public class PlayerShooting : NetworkBehaviour
             projectileScript.Launch(dir, force, OwnerClientId);
         }
 
-        // ðŸ“¡ avisar a TODOS los clientes que sigan la bala
+        // Notificamos a todos los clientes que sigan esta nueva bala
         FollowProjectileClientRpc(netObj.NetworkObjectId);
     }
 
-    // ðŸŽ¥ CLIENTES: siguen la bala
     [Rpc(SendTo.ClientsAndHost)]
     void FollowProjectileClientRpc(ulong projectileId)
     {
-        if (!NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(projectileId, out NetworkObject netObj))
-            return;
-
-        CameraManager.Instance.FollowProjectile(netObj.transform);
+        // Buscamos el objeto en la red usando su ID único
+        if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(projectileId, out NetworkObject netObj))
+        {
+            // Verificamos que el CameraManager exista antes de llamarlo
+            if (CameraManager.Instance != null)
+            {
+                CameraManager.Instance.FollowProjectile(netObj.transform);
+            }
+        }
     }
 }
