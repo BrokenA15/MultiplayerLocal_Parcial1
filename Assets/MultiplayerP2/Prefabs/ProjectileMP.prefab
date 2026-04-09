@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 4920798586361035852}
   - component: {fileID: 5420673301569365919}
   - component: {fileID: -5442581025944696416}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: ProjectileMP
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -234,7 +234,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5589455480641219373}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: CameraPivot
   m_TagString: Untagged
   m_Icon: {fileID: 2488908585195742037, guid: 0000000000000000d000000000000000, type: 0}

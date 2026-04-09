@@ -83,9 +83,8 @@ public class PlayerController : NetworkBehaviour
 
         // Movimiento (Input)
         float x = Input.GetAxis("Horizontal");
-        float y = Input.GetAxis("Vertical");
         float speed = 10 * Time.deltaTime;
-        transform.Translate(new Vector3(x * speed, y * speed));
+        transform.Translate(new Vector3(x * speed, 0,0));
 
         if (Input.GetKeyDown(KeyCode.Space))
         {

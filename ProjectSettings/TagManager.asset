@@ -9,6 +9,7 @@ TagManager:
   - Food
   - Bullet
   - Barrera
+  - Limite
   layers:
   - Default
   - TransparentFX
@@ -16,8 +17,8 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
+  - Limite
+  - Bala
   - 
   - 
   - 

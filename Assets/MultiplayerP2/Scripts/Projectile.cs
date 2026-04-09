@@ -23,17 +23,17 @@ public class Projectile : NetworkBehaviour
         rb.angularVelocity = Vector3.zero;
         rb.AddForce(direction * force, ForceMode.Impulse);
 
-        Invoke(nameof(DestroyProjectile), lifeTime);
+        // ⏱️ destrucción automática si no golpea nada
+        Invoke(nameof(Timeout), lifeTime);
     }
 
-    void DestroyProjectile()
+    // ⏱️ caso: NO golpeó nada
+    void Timeout()
     {
         if (!IsServer) return;
+        if (hasHit) return;
 
-        // ⏱️ si no golpeó nada, igual regresamos cámara
-        ReturnCameraClientRpc(0.6f);
-
-        Invoke(nameof(HandleEnd), 0.6f);
+        FinalizarConDelay();
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -48,8 +48,6 @@ public class Projectile : NetworkBehaviour
         // 🧱 BARRERA
         if (collision.gameObject.CompareTag("Barrera"))
         {
-            Debug.Log("BARRERA DETECTADA");
-
             if (collision.gameObject.TryGetComponent(out NetworkObject netObj))
             {
                 if (netObj.IsSpawned) netObj.Despawn();
@@ -58,9 +56,6 @@ public class Projectile : NetworkBehaviour
             {
                 Destroy(collision.gameObject);
             }
-
-            Impacto();
-            return;
         }
 
         // 🧍 JUGADOR
@@ -69,17 +64,16 @@ public class Projectile : NetworkBehaviour
             if (victim.OwnerClientId != ownerId)
             {
                 victim.TakeDamage(20);
-                Impacto();
             }
         }
+
+        // 💥 impacto o cualquier colisión válida
+        FinalizarConDelay();
     }
 
-    // 💥 manejo central del impacto
-    void Impacto()
+    // 💥 punto único de salida
+    void FinalizarConDelay()
     {
-        // 🎥 delay para sentir el golpe
-        ReturnCameraClientRpc(0.6f);
-
         Invoke(nameof(HandleEnd), 0.6f);
     }
 
@@ -90,15 +84,17 @@ public class Projectile : NetworkBehaviour
         // 🔄 cambiar turno
         TurnManager.Instance.EndTurnServerRpc();
 
+        // 🎥 mover cámara
+        MoveCameraClientRpc(TurnManager.Instance.currentTurn.Value);
+
         // 💣 destruir bala
         if (NetworkObject.IsSpawned)
             NetworkObject.Despawn();
     }
 
-    // 📡 avisar a TODOS los clientes que regresen cámara
     [Rpc(SendTo.ClientsAndHost)]
-    void ReturnCameraClientRpc(float delay)
+    void MoveCameraClientRpc(ulong newTurn)
     {
-        CameraManager.Instance.ReturnToCenterWithDelay(delay);
+        CameraManager.Instance.MoveToPlayerByTurn(newTurn);
     }
 }

@@ -4,8 +4,10 @@ public class CameraManager : MonoBehaviour
 {
     public static CameraManager Instance;
 
-    public Transform currentTarget;
-    public Transform defaultPivot;
+    public Transform player1Pivot;
+    public Transform player2Pivot;
+
+    private Transform currentTarget;
 
     public float smoothSpeed = 5f;
 
@@ -17,6 +19,12 @@ public class CameraManager : MonoBehaviour
     void Awake()
     {
         Instance = this;
+    }
+
+    void Start()
+    {
+        // Empieza en jugador 1
+        currentTarget = player1Pivot;
     }
 
     void LateUpdate()
@@ -40,15 +48,15 @@ public class CameraManager : MonoBehaviour
         followingProjectile = true;
     }
 
-    // 🎬 regresar al centro con delay
-    public void ReturnToCenterWithDelay(float delay)
+    // 🎬 ir al jugador según turno
+    public void MoveToPlayerByTurn(ulong turnClientId)
     {
-        Invoke(nameof(ReturnToCenter), delay);
-    }
-
-    void ReturnToCenter()
-    {
-        currentTarget = defaultPivot;
         followingProjectile = false;
+
+        // 👇 asumiendo 2 jugadores
+        if (turnClientId == 0)
+            currentTarget = player1Pivot;
+        else
+            currentTarget = player2Pivot;
     }
 }

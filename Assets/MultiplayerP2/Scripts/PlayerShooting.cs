@@ -18,15 +18,15 @@ public class PlayerShooting : NetworkBehaviour
     {
         if (!IsOwner) return;
 
-        // Si ya disparÛ, bloqueamos para evitar m˙ltiples balas antes del cambio de turno
-        if (yaDisparoEnEsteTurno) return;
-
-        // Verificamos turno y reseteamos el seguro si ya no es nuestro turno
+        // üî• PRIMERO verificar turno
         if (TurnManager.Instance != null && !TurnManager.Instance.IsMyTurn(OwnerClientId))
         {
             yaDisparoEnEsteTurno = false;
             return;
         }
+
+        // üî• DESPU√âS bloquear disparo
+        if (yaDisparoEnEsteTurno) return;
 
         HandleAim();
         HandleShoot();
@@ -59,17 +59,13 @@ public class PlayerShooting : NetworkBehaviour
 
     void HandleShoot()
     {
-        // Solo permitimos disparar si la tecla se presiona y el seguro est· libre
         if (Input.GetKeyDown(KeyCode.Return) && !yaDisparoEnEsteTurno)
         {
-            yaDisparoEnEsteTurno = true; // Bloqueo inmediato
+            yaDisparoEnEsteTurno = true;
 
             ShootServerRpc(shootPoint.position, shootPoint.right, force);
 
-            if (TurnManager.Instance != null)
-            {
-                TurnManager.Instance.EndTurnServerRpc();
-            }
+            // ‚ùå NO cambiar turno aqu√≠
         }
     }
 
@@ -94,7 +90,7 @@ public class PlayerShooting : NetworkBehaviour
     [Rpc(SendTo.ClientsAndHost)]
     void FollowProjectileClientRpc(ulong projectileId)
     {
-        // Buscamos el objeto en la red usando su ID ˙nico
+        // Buscamos el objeto en la red usando su ID ÔøΩnico
         if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(projectileId, out NetworkObject netObj))
         {
             // Verificamos que el CameraManager exista antes de llamarlo
