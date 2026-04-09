@@ -9,6 +9,7 @@ public class PlayerController : NetworkBehaviour
     public TMP_Text textoDelbug;
     private int score = 0;
     private TurnManager turnManager;
+    public Transform cameraPivot;
 
     [Header("Ajustes de Vida")]
     public NetworkVariable<int> health = new NetworkVariable<int>(100,
@@ -32,7 +33,7 @@ public class PlayerController : NetworkBehaviour
 
     private void OnHealthChanged(int previousValue, int newValue)
     {
-        // Corregido: Debug.Log con 'L' mayúscula
+        // Corregido: Debug.Log con 'L' mayï¿½scula
         Debug.Log($"BARRA ACTUALIZADA: {previousValue} -> {newValue}");
         UpdateHealthUI(newValue);
     }
@@ -41,11 +42,11 @@ public class PlayerController : NetworkBehaviour
     {
         if (healthBar != null)
         {
-            // Forzamos que la división sea decimal usando 100f
+            // Forzamos que la divisiï¿½n sea decimal usando 100f
             float currentFill = currentHealth / 100f;
             healthBar.value = currentFill;
 
-            // Si esto imprime 0.8, 0.6, etc., el código está PERFECTO 
+            // Si esto imprime 0.8, 0.6, etc., el cï¿½digo estï¿½ PERFECTO 
             // y el problema es el componente Slider en Unity.
             Debug.Log("Valor enviado al Slider: " + currentFill);
         }
@@ -61,7 +62,7 @@ public class PlayerController : NetworkBehaviour
         if (health.Value <= 0)
         {
             Debug.Log("Jugador muerto");
-            // Aquí podrías añadir: Despawn o lógica de reinicio
+            // Aquï¿½ podrï¿½as aï¿½adir: Despawn o lï¿½gica de reinicio
         }
     }
 
