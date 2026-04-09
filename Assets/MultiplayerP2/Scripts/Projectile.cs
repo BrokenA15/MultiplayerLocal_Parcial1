@@ -7,7 +7,6 @@ public class Projectile : NetworkBehaviour
     private Rigidbody rb;
 
     private ulong ownerId;
-   
 
     [SerializeField] private float lifeTime = 5f;
     private bool hasHit = false;
@@ -31,47 +30,27 @@ public class Projectile : NetworkBehaviour
 
     void DestroyProjectile()
     {
-        if (!IsServer) return;
-
-        if (NetworkObject.IsSpawned)
-        {
-            TurnManager.Instance.EndTurnServerRpc();
+        if (IsServer)
             NetworkObject.Despawn();
-        }
     }
 
     private void OnCollisionEnter(Collision collision)
     {
         if (!IsServer) return;
-        if (hasHit) return;
 
-        hasHit = true;
+        NetworkObject netObj = collision.gameObject.GetComponent<NetworkObject>();
+
+        if (netObj != null && netObj.OwnerClientId == ownerId)
+            return;
 
         PlayerController player = collision.gameObject.GetComponent<PlayerController>();
         if (player != null)
         {
-            player.TakeDamage(20);
+            player.TakeDamage(20); 
         }
+        
 
-        // 💥 delay antes de regresar cámara
-        ReturnCameraClientRpc(0.6f);
-
-        Invoke(nameof(HandleImpact), 0.6f);
-    }
-    
-    void HandleImpact()
-    {
-        if (!IsServer) return;
-
-        TurnManager.Instance.EndTurnServerRpc();
-
-        if (NetworkObject.IsSpawned)
+        if (NetworkObject != null && NetworkObject.IsSpawned)
             NetworkObject.Despawn();
-    }
-    
-    [Rpc(SendTo.ClientsAndHost)]
-    void ReturnCameraClientRpc(float delay)
-    {
-        CameraManager.Instance.ReturnToCenterWithDelay(delay);
     }
 }

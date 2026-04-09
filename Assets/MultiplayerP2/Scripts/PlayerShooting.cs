@@ -63,6 +63,7 @@ public class PlayerShooting : NetworkBehaviour
         if (Input.GetKeyDown(KeyCode.Return))
         {
             ShootServerRpc(shootPoint.position, shootPoint.right, force);
+            TurnManager.Instance.EndTurnServerRpc();
         }
     }
 
@@ -74,15 +75,5 @@ public class PlayerShooting : NetworkBehaviour
         proj.GetComponent<NetworkObject>().Spawn();
 
         proj.GetComponent<Projectile>().Launch(dir, force, OwnerClientId);
-        FollowProjectileClientRpc(proj.GetComponent<NetworkObject>().NetworkObjectId);
-    }
-    
-    [Rpc(SendTo.ClientsAndHost)]
-    void FollowProjectileClientRpc(ulong projectileId)
-    {
-        if (!NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(projectileId, out NetworkObject netObj))
-            return;
-
-        CameraManager.Instance.FollowProjectile(netObj.transform);
     }
 }
