@@ -1,13 +1,10 @@
 using UnityEngine;
 using Unity.Netcode;
 
-
 public class Projectile : NetworkBehaviour
 {
     private Rigidbody rb;
-
     private ulong ownerId;
-
     [SerializeField] private float lifeTime = 5f;
 
     void Awake()
@@ -18,10 +15,8 @@ public class Projectile : NetworkBehaviour
     public void Launch(Vector3 direction, float force, ulong shooterId)
     {
         ownerId = shooterId;
-
         rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
-
         rb.AddForce(direction * force, ForceMode.Impulse);
 
         Invoke(nameof(DestroyProjectile), lifeTime);
@@ -29,27 +24,49 @@ public class Projectile : NetworkBehaviour
 
     void DestroyProjectile()
     {
-        if (IsServer)
+        if (IsServer && NetworkObject.IsSpawned)
             NetworkObject.Despawn();
     }
 
     private void OnCollisionEnter(Collision collision)
     {
+        // 1. REGLA DE ORO: Solo el servidor manda
         if (!IsServer) return;
 
-        NetworkObject netObj = collision.gameObject.GetComponent<NetworkObject>();
+        // Log para saber qué tocamos exactamente según Unity
+        Debug.Log($"Bala golpeó a: {collision.gameObject.name} con Tag: {collision.gameObject.tag}");
 
-        if (netObj != null && netObj.OwnerClientId == ownerId)
-            return;
-
-        PlayerController player = collision.gameObject.GetComponent<PlayerController>();
-        if (player != null)
+        // 2. ¿Es una barrera? (Asegúrate que el Tag en Unity sea exactamente 'Barrera')
+        if (collision.gameObject.CompareTag("Barrera"))
         {
-            player.TakeDamage(20); 
-        }
-        
+            Debug.Log("¡BARRERA DETECTADA! Despawneando...");
 
-        if (NetworkObject != null && NetworkObject.IsSpawned)
-            NetworkObject.Despawn();
+            if (collision.gameObject.TryGetComponent(out NetworkObject netObj))
+            {
+                if (netObj.IsSpawned) netObj.Despawn();
+            }
+            else
+            {
+                Destroy(collision.gameObject);
+            }
+
+            FinalizarBala();
+            return;
+        }
+
+        // 3. ¿Es el jugador enemigo?
+        if (collision.gameObject.TryGetComponent(out PlayerController victim))
+        {
+            if (victim.OwnerClientId != ownerId)
+            {
+                victim.TakeDamage(20);
+                FinalizarBala();
+            }
+        }
+    }
+
+    void FinalizarBala()
+    {
+        if (NetworkObject.IsSpawned) NetworkObject.Despawn();
     }
 }

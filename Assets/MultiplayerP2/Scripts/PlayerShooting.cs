@@ -14,8 +14,11 @@ public class PlayerShooting : NetworkBehaviour
 
     void Update()
     {
+        
         if (!IsOwner) return;
-        if (!TurnManager.Instance.IsMyTurn(OwnerClientId)) return;
+
+        
+        if (TurnManager.Instance != null && !TurnManager.Instance.IsMyTurn(OwnerClientId)) return;
 
         HandleAim();
         HandleShoot();
@@ -23,17 +26,10 @@ public class PlayerShooting : NetworkBehaviour
 
     void HandleAim()
     {
-        if (Input.GetKey(KeyCode.Q))
-            angle += 80f * Time.deltaTime;
-
-        if (Input.GetKey(KeyCode.E))
-            angle -= 80f * Time.deltaTime;
-
-        if (Input.GetKey(KeyCode.Z))
-            force += 10f * Time.deltaTime;
-
-        if (Input.GetKey(KeyCode.C))
-            force -= 10f * Time.deltaTime;
+        if (Input.GetKey(KeyCode.Q)) angle += 80f * Time.deltaTime;
+        if (Input.GetKey(KeyCode.E)) angle -= 80f * Time.deltaTime;
+        if (Input.GetKey(KeyCode.Z)) force += 10f * Time.deltaTime;
+        if (Input.GetKey(KeyCode.C)) force -= 10f * Time.deltaTime;
 
         angle = Mathf.Clamp(angle, 0f, 180f);
         force = Mathf.Clamp(force, minForce, maxForce);
@@ -41,28 +37,27 @@ public class PlayerShooting : NetworkBehaviour
         UpdateShootPointPosition();
     }
 
-    void UpdateShootPointPosition() // Hace que se mueva la ubicacion de donde sale el proyectil, si es mucho pedo para animar pues se 
-                                    // chingan putos                    
-
-                                    // No se crean los amo, si necesitan creo que con que quiten esta funcion deja de pasar eso, sino es modificar poquito la de arriba
+    void UpdateShootPointPosition()
     {
-        float radius = 1.5f; // distancia de la boquilla del arma del jugadorsini
-
+        float radius = 1.5f;
         float rad = angle * Mathf.Deg2Rad;
 
         float x = Mathf.Cos(rad) * radius;
         float y = Mathf.Sin(rad) * radius;
 
         shootPoint.localPosition = new Vector3(x, y, 0);
-
         shootPoint.right = (shootPoint.position - transform.position).normalized;
     }
 
     void HandleShoot()
     {
+       
         if (Input.GetKeyDown(KeyCode.Return))
         {
+            
             ShootServerRpc(shootPoint.position, shootPoint.right, force);
+
+            
             TurnManager.Instance.EndTurnServerRpc();
         }
     }
@@ -70,10 +65,17 @@ public class PlayerShooting : NetworkBehaviour
     [Rpc(SendTo.Server)]
     void ShootServerRpc(Vector3 pos, Vector3 dir, float force)
     {
+        
         GameObject proj = Instantiate(projectilePrefab, pos, Quaternion.identity);
 
-        proj.GetComponent<NetworkObject>().Spawn();
+        NetworkObject netObj = proj.GetComponent<NetworkObject>();
+        netObj.Spawn();
 
-        proj.GetComponent<Projectile>().Launch(dir, force, OwnerClientId);
+       
+        Projectile projectileScript = proj.GetComponent<Projectile>();
+        if (projectileScript != null)
+        {
+            projectileScript.Launch(dir, force, OwnerClientId);
+        }
     }
 }
