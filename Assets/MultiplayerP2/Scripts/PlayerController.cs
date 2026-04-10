@@ -10,6 +10,9 @@ public class PlayerController : NetworkBehaviour
     private int score = 0;
     private TurnManager turnManager;
     public Transform cameraPivot;
+    private bool gameEnded = false;
+
+
 
     [Header("Ajustes de Vida")]
     public NetworkVariable<int> health = new NetworkVariable<int>(100,
@@ -52,19 +55,53 @@ public class PlayerController : NetworkBehaviour
         }
     }
 
+
     public void TakeDamage(int damage)
     {
-        if (!IsServer) return; // Solo el servidor tiene permiso de modificar la NetworkVariable
+        if (!IsServer) return;
+
+        if (gameEnded) return;
 
         health.Value -= damage;
-        Debug.Log($"Vida restante del jugador {OwnerClientId}: {health.Value}");
 
         if (health.Value <= 0)
         {
+            gameEnded = true;
+
             Debug.Log("Jugador muerto");
-            // Aqu� podr�as a�adir: Despawn o l�gica de reinicio
+
+            ulong loserId = OwnerClientId;
+
+            ulong winnerId = NetworkManager.Singleton.ConnectedClientsIds
+                .First(id => id != loserId);
+
+            ShowResultClientRpc(winnerId);
         }
     }
+
+    [ClientRpc]
+    void ShowResultClientRpc(ulong winnerId)
+    {
+        ulong localId = NetworkManager.Singleton.LocalClientId;
+
+        if (UIManager.Instance == null)
+        {
+            Debug.LogError("UIManager no encontrado");
+            return;
+        }
+
+        if (localId == winnerId)
+        {
+            Debug.Log("VICTORIA");
+            UIManager.Instance.ShowVictory();
+        }
+        else
+        {
+            Debug.Log("DERROTA");
+            UIManager.Instance.ShowDefeat();
+        }
+    }
+
 
     void Update()
     {
@@ -82,9 +119,7 @@ public class PlayerController : NetworkBehaviour
         if (!TurnManager.Instance.IsMyTurn(OwnerClientId)) return;
 
         // Movimiento (Input)
-        float x = Input.GetAxis("Horizontal");
-        float speed = 10 * Time.deltaTime;
-        transform.Translate(new Vector3(x * speed, 0,0));
+       
 
         if (Input.GetKeyDown(KeyCode.Space))
         {

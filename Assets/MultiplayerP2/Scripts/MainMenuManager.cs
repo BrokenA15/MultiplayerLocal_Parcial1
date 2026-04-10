@@ -10,7 +10,7 @@ public class MainMenuManager : MonoBehaviour
   
     public void Jugar()
     {
-        Debug.Log("Cargando juego...");
+      
         
         SceneManager.LoadScene(nombreEscenaJuego);
     }
@@ -18,7 +18,7 @@ public class MainMenuManager : MonoBehaviour
     
     public void SalirDelJuego()
     {
-        Debug.Log("Saliendo del juego...");
+        
 
        
         Application.Quit();
