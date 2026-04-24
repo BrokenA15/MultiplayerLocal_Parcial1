@@ -1,4 +1,6 @@
 using UnityEngine;
+using Unity.Netcode;
+using System.Linq;
 
 public class CameraManager : MonoBehaviour
 {
@@ -6,6 +8,7 @@ public class CameraManager : MonoBehaviour
 
     public Transform player1Pivot;
     public Transform player2Pivot;
+
 
     private Transform currentTarget;
 
@@ -15,6 +18,15 @@ public class CameraManager : MonoBehaviour
     public Vector3 projectileOffset = new Vector3(-4, 3, -6);
 
     private bool followingProjectile = false;
+
+    enum CameraState
+    {
+        Player,
+        Projectile,
+        Barrier
+    }
+     
+    private CameraState currentState = CameraState.Player;
 
     void Awake()
     {
@@ -33,30 +45,47 @@ public class CameraManager : MonoBehaviour
 
         Vector3 desiredPosition;
 
-        if (followingProjectile)
-            desiredPosition = currentTarget.position + projectileOffset;
-        else
-            desiredPosition = currentTarget.position + offset;
+        switch (currentState)
+        {
+            case CameraState.Player:
+                desiredPosition = currentTarget.position + offset;
+                break;
+
+            case CameraState.Projectile:
+                desiredPosition = currentTarget.position + projectileOffset;
+                break;
+
+            case CameraState.Barrier:
+                desiredPosition = currentTarget.position + offset;
+                break;
+
+            default:
+                desiredPosition = currentTarget.position + offset;
+                break;
+        }
 
         transform.position = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed * Time.deltaTime);
     }
 
-    // 🎯 seguir bala
     public void FollowProjectile(Transform projectile)
     {
         currentTarget = projectile;
-        followingProjectile = true;
+        currentState = CameraState.Projectile;
     }
 
-    // 🎬 ir al jugador según turno
     public void MoveToPlayerByTurn(ulong turnClientId)
     {
-        followingProjectile = false;
+        currentState = CameraState.Player;
 
-        // 👇 asumiendo 2 jugadores
-        if (turnClientId == 0)
+        if (turnClientId == NetworkManager.Singleton.ConnectedClientsIds.First())
             currentTarget = player1Pivot;
         else
             currentTarget = player2Pivot;
+    }
+
+    public void MoveToBarrier(Transform barrierPoint)
+    {
+        currentTarget = barrierPoint;
+        currentState = CameraState.Barrier;
     }
 }

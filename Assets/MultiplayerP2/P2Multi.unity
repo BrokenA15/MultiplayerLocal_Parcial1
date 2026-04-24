@@ -932,6 +932,10 @@ PrefabInstance:
       propertyPath: SceneMigrationSynchronization
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6775950758702684968, guid: f12ab88a99297544cb466930b51ff99c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7064196463739444502, guid: f12ab88a99297544cb466930b51ff99c, type: 3}
       propertyPath: GlobalObjectIdHash
       value: 2229270953
@@ -4299,7 +4303,7 @@ SceneRoots:
   - {fileID: 1870143468}
   - {fileID: 682485188}
   - {fileID: 2077530914}
-  - {fileID: 382125059}
   - {fileID: 1987858542}
   - {fileID: 819646300}
   - {fileID: 1294313765}
+  - {fileID: 382125059}

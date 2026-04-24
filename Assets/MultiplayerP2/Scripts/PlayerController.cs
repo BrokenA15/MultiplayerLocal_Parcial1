@@ -12,7 +12,18 @@ public class PlayerController : NetworkBehaviour
     public Transform cameraPivot;
     private bool gameEnded = false;
 
+    [Header("Barrier")]
+    public GameObject barrierPrefab;
+    public Transform barrierPoint;
 
+    enum TurnState
+    {
+        Waiting,
+        PlacingBarrier,
+        Playing
+    }
+
+    private TurnState currentState = TurnState.Waiting;
 
     [Header("Ajustes de Vida")]
     public NetworkVariable<int> health = new NetworkVariable<int>(100,
@@ -23,7 +34,8 @@ public class PlayerController : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
-      
+        TurnManager.Instance.currentTurn.OnValueChanged += OnTurnChanged;
+
         health.OnValueChanged += OnHealthChanged;
    
         UpdateHealthUI(health.Value);
@@ -32,6 +44,27 @@ public class PlayerController : NetworkBehaviour
 
         GameObject debugObj = GameObject.Find("Textito");
         if (debugObj != null) textoDelbug = debugObj.GetComponent<TMP_Text>();
+    }
+
+    void OnTurnChanged(ulong previous, ulong current)
+    {
+        // 👉 SIEMPRE mueve la cámara al jugador en turno
+        CameraManager.Instance.MoveToPlayerByTurn(current);
+
+        // 👉 Solo el dueño inicia su turno
+        if (!IsOwner) return;
+
+        if (current == OwnerClientId)
+        {
+            StartTurn();
+        }
+    }
+
+    void StartTurn()
+    {
+        currentState = TurnState.PlacingBarrier;
+
+        CameraManager.Instance.MoveToBarrier(barrierPoint);
     }
 
     private void OnHealthChanged(int previousValue, int newValue)
@@ -113,22 +146,62 @@ public class PlayerController : NetworkBehaviour
                 : "Turno: Cliente (Jugador 2)";
         }
 
-      
-        if (!IsOwner) return;
 
+        if (!IsOwner) return;
         if (!TurnManager.Instance.IsMyTurn(OwnerClientId)) return;
 
-        // Movimiento (Input)
-       
-
-        if (Input.GetKeyDown(KeyCode.Space))
+        switch (currentState)
         {
-            TurnManager.Instance.EndTurnServerRpc();
+            case TurnState.PlacingBarrier:
+
+                if (Input.GetMouseButtonDown(0))
+                {
+                    PlaceBarrierServerRpc();
+
+                    currentState = TurnState.Playing;
+
+                   
+                }
+
+                break;
+
+            case TurnState.Playing:
+
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    TurnManager.Instance.EndTurnServerRpc();
+                    currentState = TurnState.Waiting;
+                }
+
+                break;
         }
+    }
+
+    [Rpc(SendTo.Server)]
+    void PlaceBarrierServerRpc()
+    {
+        GameObject barrier = Instantiate(barrierPrefab, barrierPoint.position, Quaternion.identity);
+        NetworkObject netObj = barrier.GetComponent<NetworkObject>();
+
+        netObj.Spawn();
+
+        FollowBarrierClientRpc(netObj.NetworkObjectId);
+    }
+
+    [ClientRpc]
+    void FollowBarrierClientRpc(ulong networkObjectId)
+    {
+        if (!NetworkManager.Singleton.SpawnManager.SpawnedObjects.ContainsKey(networkObjectId))
+            return;
+
+        var barrier = NetworkManager.Singleton.SpawnManager.SpawnedObjects[networkObjectId];
+
+        CameraManager.Instance.MoveToBarrier(barrier.transform);
     }
 
     public override void OnNetworkDespawn()
     {
         health.OnValueChanged -= OnHealthChanged;
+        TurnManager.Instance.currentTurn.OnValueChanged -= OnTurnChanged;
     }
 }

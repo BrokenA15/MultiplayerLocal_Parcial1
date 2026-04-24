@@ -14,16 +14,18 @@ public class TurnManager : NetworkBehaviour
         if (Instance == null)
             Instance = this;
 
+      
+
         if (IsServer)
         {
             var clients = NetworkManager.Singleton.ConnectedClientsIds.ToList();
             if (clients.Count > 0)
                 currentTurn.Value = clients[0];
         }
-
-        Debug.Log("Turno actual: " + currentTurn.Value);
     }
+
     
+
     public bool IsMyTurn(ulong clientId)
     {
         return currentTurn.Value == clientId;

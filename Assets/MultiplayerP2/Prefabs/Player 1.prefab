@@ -527,6 +527,37 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &6904255325840382169
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6882820144118058010}
+  m_Layer: 0
+  m_Name: BarrierPOint
+  m_TagString: Untagged
+  m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6882820144118058010
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6904255325840382169}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -10.03}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2892047097663291487}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6991266331256345866
 GameObject:
   m_ObjectHideFlags: 0
@@ -568,6 +599,7 @@ Transform:
   - {fileID: 507451771862346355}
   - {fileID: 319596175281687770}
   - {fileID: 1859990975272014955}
+  - {fileID: 6882820144118058010}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &8583210266071743790
@@ -686,6 +718,8 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   textoDelbug: {fileID: 0}
   cameraPivot: {fileID: 1859990975272014955}
+  barrierPrefab: {fileID: 8280355107174672871, guid: 54c9dc72d35d7fc4bafb05c645817ed4, type: 3}
+  barrierPoint: {fileID: 6882820144118058010}
   health:
     UpdateTraits:
       MinSecondsBetweenUpdates: 0

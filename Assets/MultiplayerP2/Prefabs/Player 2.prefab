@@ -319,6 +319,37 @@ RectTransform:
   m_AnchoredPosition: {x: -5, y: 0}
   m_SizeDelta: {x: -20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &3365383657859257346
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6819220941871088392}
+  m_Layer: 0
+  m_Name: BarrierPOint
+  m_TagString: Untagged
+  m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6819220941871088392
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3365383657859257346}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -10.03}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2892047097663291487}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4171101033683927226
 GameObject:
   m_ObjectHideFlags: 0
@@ -565,6 +596,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4830714047260527139}
+  - {fileID: 6819220941871088392}
   - {fileID: 218810131062230235}
   - {fileID: 507451771862346355}
   - {fileID: 319596175281687770}
@@ -686,6 +718,8 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   textoDelbug: {fileID: 0}
   cameraPivot: {fileID: 4830714047260527139}
+  barrierPrefab: {fileID: 8280355107174672871, guid: 54c9dc72d35d7fc4bafb05c645817ed4, type: 3}
+  barrierPoint: {fileID: 6819220941871088392}
   health:
     UpdateTraits:
       MinSecondsBetweenUpdates: 0
