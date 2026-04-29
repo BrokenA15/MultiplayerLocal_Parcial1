@@ -18,18 +18,34 @@ public class PlayerShooting : NetworkBehaviour
     {
         if (!IsOwner) return;
 
-        // 🔥 PRIMERO verificar turno
-        if (TurnManager.Instance != null && !TurnManager.Instance.IsMyTurn(OwnerClientId))
+        if (TurnManager.Instance == null) return;
+        
+        if (TurnManager.Instance.currentPhase.Value != TurnManager.GamePhase.Shooting)
+            return;
+        
+        if (!TurnManager.Instance.IsMyTurn(OwnerClientId))
         {
             yaDisparoEnEsteTurno = false;
             return;
         }
 
-        // 🔥 DESPUÉS bloquear disparo
         if (yaDisparoEnEsteTurno) return;
 
         HandleAim();
         HandleShoot();
+    }
+    
+    public override void OnNetworkSpawn()
+    {
+        if (TurnManager.Instance != null)
+        {
+            TurnManager.Instance.currentTurn.OnValueChanged += OnTurnChanged;
+        }
+    }
+
+    void OnTurnChanged(ulong oldTurn, ulong newTurn)
+    {
+        yaDisparoEnEsteTurno = false;
     }
 
     void HandleAim()

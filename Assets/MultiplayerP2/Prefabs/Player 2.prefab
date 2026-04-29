@@ -720,6 +720,8 @@ MonoBehaviour:
   cameraPivot: {fileID: 4830714047260527139}
   barrierPrefab: {fileID: 8280355107174672871, guid: 54c9dc72d35d7fc4bafb05c645817ed4, type: 3}
   barrierPoint: {fileID: 6819220941871088392}
+  barrierPreview: {fileID: 7369315791450349096, guid: 1e7cbee9d2694e048bc7b35edccd3892, type: 3}
+  moveSpeed: 5
   health:
     UpdateTraits:
       MinSecondsBetweenUpdates: 0

@@ -16,14 +16,10 @@ public class PlayerController : NetworkBehaviour
     public GameObject barrierPrefab;
     public Transform barrierPoint;
 
-    enum TurnState
-    {
-        Waiting,
-        PlacingBarrier,
-        Playing
-    }
+    [Header("Barrier Placement")]
+    public Transform barrierPreview; // objeto visual que mueves antes de colocar
+    public float moveSpeed = 5f;
 
-    private TurnState currentState = TurnState.Waiting;
 
     [Header("Ajustes de Vida")]
     public NetworkVariable<int> health = new NetworkVariable<int>(100,
@@ -48,23 +44,16 @@ public class PlayerController : NetworkBehaviour
 
     void OnTurnChanged(ulong previous, ulong current)
     {
-        // 👉 SIEMPRE mueve la cámara al jugador en turno
+       
         CameraManager.Instance.MoveToPlayerByTurn(current);
 
-        // 👉 Solo el dueño inicia su turno
+       
         if (!IsOwner) return;
 
         if (current == OwnerClientId)
         {
             StartTurn();
         }
-    }
-
-    void StartTurn()
-    {
-        currentState = TurnState.PlacingBarrier;
-
-        CameraManager.Instance.MoveToBarrier(barrierPoint);
     }
 
     private void OnHealthChanged(int previousValue, int newValue)
@@ -112,6 +101,34 @@ public class PlayerController : NetworkBehaviour
         }
     }
 
+    void StartTurn()
+    {
+        var phase = TurnManager.Instance.currentPhase.Value;
+
+        switch (phase)
+        {
+            case TurnManager.GamePhase.PlacingBarriers:
+
+               
+                if (barrierPreview != null)
+                    barrierPreview.gameObject.SetActive(true);
+
+               
+                CameraManager.Instance.MoveToBarrier(barrierPreview);
+
+                break;
+
+            case TurnManager.GamePhase.Shooting:
+              
+                if (barrierPreview != null)
+                    barrierPreview.gameObject.SetActive(false);
+                
+                CameraManager.Instance.MoveToPlayerByTurn(OwnerClientId);
+
+                break;
+        }
+    }
+    
     [ClientRpc]
     void ShowResultClientRpc(ulong winnerId)
     {
@@ -141,44 +158,67 @@ public class PlayerController : NetworkBehaviour
       
         if (textoDelbug != null && TurnManager.Instance != null)
         {
-            textoDelbug.text = TurnManager.Instance.currentTurn.Value == 0
-                ? "Turno: Host (Jugador 1)"
-                : "Turno: Cliente (Jugador 2)";
+            textoDelbug.text =
+                $"Turno: {(TurnManager.Instance.currentTurn.Value == 0 ? "Jugador 1" : "Jugador 2")}\n" +
+                $"Fase: {TurnManager.Instance.currentPhase.Value}\n" +
+                $"Ronda: {TurnManager.Instance.currentRound.Value}";
         }
 
 
         if (!IsOwner) return;
         if (!TurnManager.Instance.IsMyTurn(OwnerClientId)) return;
 
-        switch (currentState)
+        var phase = TurnManager.Instance.currentPhase.Value;
+
+        switch (phase)
         {
-            case TurnState.PlacingBarrier:
-
-                if (Input.GetMouseButtonDown(0))
-                {
-                    PlaceBarrierServerRpc();
-
-                    currentState = TurnState.Playing;
-
-                   
-                }
-
+            case TurnManager.GamePhase.PlacingBarriers:
+                HandleBarrierPlacement();
                 break;
 
-            case TurnState.Playing:
-
-                if (Input.GetKeyDown(KeyCode.Space))
-                {
-                    TurnManager.Instance.EndTurnServerRpc();
-                    currentState = TurnState.Waiting;
-                }
-
+            case TurnManager.GamePhase.Shooting:
+                HandleShootingTurn();
                 break;
+        }
+    }
+    
+    void HandleBarrierPlacement()
+    {
+        HandleBarrierMovement();
+
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            PlaceBarrierServerRpc(barrierPreview.position);
+
+            barrierPreview.gameObject.SetActive(false);
+
+            TurnManager.Instance.EndTurnServerRpc();
+        }
+    }
+    
+    void HandleBarrierMovement()
+    {
+        float x = Input.GetAxis("Horizontal");
+        float z = Input.GetAxis("Vertical");
+
+        Vector3 move = new Vector3(x, 0, z) * moveSpeed * Time.deltaTime;
+
+        barrierPreview.position += move;
+    }
+    
+    void HandleShootingTurn()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            // aquí puedes llamar tu sistema de disparo si quieres
+            Debug.Log("Disparo");
+
+            TurnManager.Instance.EndTurnServerRpc();
         }
     }
 
     [Rpc(SendTo.Server)]
-    void PlaceBarrierServerRpc()
+    void PlaceBarrierServerRpc(Vector3 position)
     {
         GameObject barrier = Instantiate(barrierPrefab, barrierPoint.position, Quaternion.identity);
         NetworkObject netObj = barrier.GetComponent<NetworkObject>();

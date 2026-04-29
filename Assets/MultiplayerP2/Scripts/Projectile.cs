@@ -5,7 +5,7 @@ public class Projectile : NetworkBehaviour
 {
     private Rigidbody rb;
     private ulong ownerId;
-
+    private bool ended = false; 
     [SerializeField] private float lifeTime = 5f;
 
     private bool hasHit = false;
@@ -23,11 +23,11 @@ public class Projectile : NetworkBehaviour
         rb.angularVelocity = Vector3.zero;
         rb.AddForce(direction * force, ForceMode.Impulse);
 
-        // ⏱️ destrucción automática si no golpea nada
+        // :stopwatch: destrucción automática si no golpea nada
         Invoke(nameof(Timeout), lifeTime);
     }
 
-    // ⏱️ caso: NO golpeó nada
+    // :stopwatch: caso: NO golpeó nada
     void Timeout()
     {
         if (!IsServer) return;
@@ -43,9 +43,10 @@ public class Projectile : NetworkBehaviour
 
         hasHit = true;
 
-        Debug.Log($"Bala golpeó a: {collision.gameObject.name} con Tag: {collision.gameObject.tag}");
+        CancelInvoke(nameof(Timeout));
 
-        // 🧱 BARRERA
+
+        /*
         if (collision.gameObject.CompareTag("Barrera"))
         {
             if (collision.gameObject.TryGetComponent(out NetworkObject netObj))
@@ -57,21 +58,27 @@ public class Projectile : NetworkBehaviour
                 Destroy(collision.gameObject);
             }
         }
-
-        // 🧍 JUGADOR
+        */
+        
+        // :person_standing: JUGADOR
         if (collision.gameObject.TryGetComponent(out PlayerController victim))
         {
             if (victim.OwnerClientId != ownerId)
             {
                 victim.TakeDamage(20);
+
+                // :fire: NUEVO
+                TurnManager.Instance.RegisterHit(ownerId);
+
+               
             }
         }
 
-        // 💥 impacto o cualquier colisión válida
+       
         FinalizarConDelay();
     }
 
-    // 💥 punto único de salida
+    // :boom: punto único de salida
     void FinalizarConDelay()
     {
         Invoke(nameof(HandleEnd), 0.6f);
@@ -80,14 +87,15 @@ public class Projectile : NetworkBehaviour
     void HandleEnd()
     {
         if (!IsServer) return;
+        if (ended) return;
+        
+        ended = true;
 
-        // 🔄 cambiar turno
+        TurnManager.Instance.RegisterShot();
         TurnManager.Instance.EndTurnServerRpc();
 
-        // 🎥 mover cámara
         MoveCameraClientRpc(TurnManager.Instance.currentTurn.Value);
 
-        // 💣 destruir bala
         if (NetworkObject.IsSpawned)
             NetworkObject.Despawn();
     }
