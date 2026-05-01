@@ -45,6 +45,7 @@ public class CameraManager : MonoBehaviour
 
         Vector3 desiredPosition;
 
+        Debug.Log(currentState);
         switch (currentState)
         {
             case CameraState.Player:

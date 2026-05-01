@@ -17,7 +17,8 @@ public class PlayerController : NetworkBehaviour
     public Transform barrierPoint;
 
     [Header("Barrier Placement")]
-    public Transform barrierPreview; // objeto visual que mueves antes de colocar
+    public GameObject barrierPreviewPrefab;
+    private Transform barrierPreviewInstance; 
     public float moveSpeed = 5f;
 
 
@@ -109,20 +110,22 @@ public class PlayerController : NetworkBehaviour
         {
             case TurnManager.GamePhase.PlacingBarriers:
 
-               
-                if (barrierPreview != null)
-                    barrierPreview.gameObject.SetActive(true);
-
-               
-                CameraManager.Instance.MoveToBarrier(barrierPreview);
+                if (barrierPreviewInstance == null)
+                {
+                    GameObject preview = Instantiate(barrierPreviewPrefab, transform.position + Vector3.forward * 2f, Quaternion.identity);
+                    barrierPreviewInstance = preview.transform;
+                }
 
                 break;
 
             case TurnManager.GamePhase.Shooting:
-              
-                if (barrierPreview != null)
-                    barrierPreview.gameObject.SetActive(false);
-                
+
+                if (barrierPreviewInstance != null)
+                {
+                    Destroy(barrierPreviewInstance.gameObject);
+                    barrierPreviewInstance = null;
+                }
+
                 CameraManager.Instance.MoveToPlayerByTurn(OwnerClientId);
 
                 break;
@@ -188,9 +191,12 @@ public class PlayerController : NetworkBehaviour
 
         if (Input.GetKeyDown(KeyCode.Return))
         {
-            PlaceBarrierServerRpc(barrierPreview.position);
+            if (barrierPreviewInstance == null) return;
 
-            barrierPreview.gameObject.SetActive(false);
+            PlaceBarrierServerRpc(barrierPreviewInstance.position);
+
+            Destroy(barrierPreviewInstance.gameObject);
+            barrierPreviewInstance = null;
 
             TurnManager.Instance.EndTurnServerRpc();
         }
@@ -203,7 +209,10 @@ public class PlayerController : NetworkBehaviour
 
         Vector3 move = new Vector3(x, 0, z) * moveSpeed * Time.deltaTime;
 
-        barrierPreview.position += move;
+        if (barrierPreviewInstance != null)
+        {
+            barrierPreviewInstance.position += move;
+        }
     }
     
     void HandleShootingTurn()
@@ -220,7 +229,7 @@ public class PlayerController : NetworkBehaviour
     [Rpc(SendTo.Server)]
     void PlaceBarrierServerRpc(Vector3 position)
     {
-        GameObject barrier = Instantiate(barrierPrefab, barrierPoint.position, Quaternion.identity);
+        GameObject barrier = Instantiate(barrierPrefab, position, Quaternion.identity);
         NetworkObject netObj = barrier.GetComponent<NetworkObject>();
 
         netObj.Spawn();
