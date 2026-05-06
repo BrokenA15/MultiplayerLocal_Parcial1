@@ -544,6 +544,7 @@ GameObject:
   - component: {fileID: 6090721946005100128}
   - component: {fileID: 8485577009935308358}
   - component: {fileID: 6792244291071178814}
+  - component: {fileID: -2844182416178839757}
   m_Layer: 0
   m_Name: Player 1
   m_TagString: Player
@@ -745,7 +746,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6991266331256345866}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 095f561f19bd7dc4483faf3db802a68e, type: 3}
   m_Name: 
@@ -782,8 +783,25 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 126
+  m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!114 &-2844182416178839757
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6991266331256345866}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc35fa7a359f5054fa613f503e2ef5ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  barreraPrefab: {fileID: 6452529891711936369, guid: 54c9dc72d35d7fc4bafb05c645817ed4, type: 3}
+  barreraGhostPrefab: {fileID: 6452529891711936369, guid: 7f598ff78e2ebfb46ab2bcdb61b223e0, type: 3}
+  rangoMaximo: 1000000
+  profundidadZFija: 13.27
 --- !u!1001 &3143753333140030049
 PrefabInstance:
   m_ObjectHideFlags: 0

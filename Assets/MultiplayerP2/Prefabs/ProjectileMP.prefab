@@ -179,6 +179,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
   lifeTime: 5
+  radioExplosion: 2
+  fuerzaExplosion: 1
 --- !u!114 &-5442581025944696416
 MonoBehaviour:
   m_ObjectHideFlags: 0

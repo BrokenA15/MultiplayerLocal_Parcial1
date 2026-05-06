@@ -10,6 +10,7 @@ TagManager:
   - Bullet
   - Barrera
   - Limite
+  - Suelo
   layers:
   - Default
   - TransparentFX

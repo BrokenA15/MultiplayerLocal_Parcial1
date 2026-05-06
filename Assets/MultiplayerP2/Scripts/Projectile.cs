@@ -6,7 +6,10 @@ public class Projectile : NetworkBehaviour
     private Rigidbody rb;
     private ulong ownerId;
 
+    [Header("Configuración de Bala")]
     [SerializeField] private float lifeTime = 5f;
+    [SerializeField] private float radioExplosion = 3.0f; // Tamaño del cráter/empuje
+    [SerializeField] private float fuerzaExplosion = 15f; // Qué tan fuerte vuelan
 
     private bool hasHit = false;
 
@@ -27,54 +30,77 @@ public class Projectile : NetworkBehaviour
         Invoke(nameof(Timeout), lifeTime);
     }
 
-    // ⏱️ caso: NO golpeó nada
     void Timeout()
     {
-        if (!IsServer) return;
-        if (hasHit) return;
-
+        if (!IsServer || hasHit) return;
         FinalizarConDelay();
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (!IsServer) return;
-        if (hasHit) return;
+        if (!IsServer || hasHit) return;
 
         hasHit = true;
 
-        Debug.Log($"Bala golpeó a: {collision.gameObject.name} con Tag: {collision.gameObject.tag}");
+        // Punto exacto donde la bala tocó algo
+        Vector3 puntoImpacto = collision.contacts[0].point;
 
-        // 🧱 BARRERA
-        if (collision.gameObject.CompareTag("Barrera"))
-        {
-            if (collision.gameObject.TryGetComponent(out NetworkObject netObj))
-            {
-                if (netObj.IsSpawned) netObj.Despawn();
-            }
-            else
-            {
-                Destroy(collision.gameObject);
-            }
-        }
+        Debug.Log($"Impacto en: {puntoImpacto}. Procesando explosión tipo Worms...");
 
-        // 🧍 JUGADOR
-        if (collision.gameObject.TryGetComponent(out PlayerController victim))
-        {
-            if (victim.OwnerClientId != ownerId)
-            {
-                victim.TakeDamage(20);
-            }
-        }
+        // 💥 EJECUTAR ONDA DE CHOQUE Y DESTRUCCIÓN
+        ProcesarExplosionMecanica(puntoImpacto);
 
-        // 💥 impacto o cualquier colisión válida
+        // ⏱️ Esperar un poco antes de cambiar el turno (para ver el caos)
         FinalizarConDelay();
     }
 
-    // 💥 punto único de salida
+    void ProcesarExplosionMecanica(Vector3 origen)
+    {
+        // Detectar todo en el radio de la explosión
+        Collider[] objetosCercanos = Physics.OverlapSphere(origen, radioExplosion);
+
+        foreach (Collider col in objetosCercanos)
+        {
+            // 🧱 1. DESTRUIR SUELO Y BARRERAS
+            if (col.CompareTag("Suelo") || col.CompareTag("Barrera"))
+            {
+                if (col.TryGetComponent(out NetworkObject netObj))
+                {
+                    if (netObj.IsSpawned) netObj.Despawn();
+                }
+                else
+                {
+                    Destroy(col.gameObject);
+                }
+                continue; // Pasamos al siguiente objeto
+            }
+
+            // 🧍 2. DAÑAR Y EMPUJAR JUGADORES
+            if (col.CompareTag("Player"))
+            {
+                // Aplicar Daño
+                if (col.TryGetComponent(out PlayerController victim))
+                {
+                    victim.TakeDamage(20);
+                }
+
+                // Aplicar Empuje (Knockback)
+                Rigidbody victimRb = col.GetComponent<Rigidbody>();
+                if (victimRb != null)
+                {
+                    Vector3 direccion = (col.transform.position - origen).normalized;
+                    direccion.y += 0.5f; // Impulso extra hacia arriba para que "vuelen"
+
+                    victimRb.AddForce(direccion * fuerzaExplosion, ForceMode.Impulse);
+                }
+            }
+        }
+    }
+
     void FinalizarConDelay()
     {
-        Invoke(nameof(HandleEnd), 0.6f);
+        // Aumenté el delay a 1.2s para que la cámara pueda ver el empuje antes de cambiar
+        Invoke(nameof(HandleEnd), 1.2f);
     }
 
     void HandleEnd()
@@ -84,7 +110,7 @@ public class Projectile : NetworkBehaviour
         // 🔄 cambiar turno
         TurnManager.Instance.EndTurnServerRpc();
 
-        // 🎥 mover cámara
+        // 🎥 mover cámara al nuevo jugador
         MoveCameraClientRpc(TurnManager.Instance.currentTurn.Value);
 
         // 💣 destruir bala
@@ -95,6 +121,14 @@ public class Projectile : NetworkBehaviour
     [Rpc(SendTo.ClientsAndHost)]
     void MoveCameraClientRpc(ulong newTurn)
     {
-        CameraManager.Instance.MoveToPlayerByTurn(newTurn);
+        if (CameraManager.Instance != null)
+            CameraManager.Instance.MoveToPlayerByTurn(newTurn);
+    }
+
+    // Visualizar el radio de la explosión en el Editor
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, radioExplosion);
     }
 }

@@ -8,7 +8,7 @@ public class PlayerController : NetworkBehaviour
 {
     public TMP_Text textoDelbug;
     private int score = 0;
-    private TurnManager turnManager;
+    private TurnManager1 turnManager1;
     public Transform cameraPivot;
     private bool gameEnded = false;
 
@@ -28,10 +28,11 @@ public class PlayerController : NetworkBehaviour
    
         UpdateHealthUI(health.Value);
      
-        if (turnManager == null) turnManager = FindFirstObjectByType<TurnManager>();
+        if (turnManager1 == null) turnManager1 = FindFirstObjectByType<TurnManager1>();
 
         GameObject debugObj = GameObject.Find("Textito");
         if (debugObj != null) textoDelbug = debugObj.GetComponent<TMP_Text>();
+
     }
 
     private void OnHealthChanged(int previousValue, int newValue)
@@ -106,9 +107,9 @@ public class PlayerController : NetworkBehaviour
     void Update()
     {
       
-        if (textoDelbug != null && TurnManager.Instance != null)
+        if (textoDelbug != null && TurnManager1.Instance != null)
         {
-            textoDelbug.text = TurnManager.Instance.currentTurn.Value == 0
+            textoDelbug.text = TurnManager1.Instance.currentTurn.Value == 0
                 ? "Turno: Host (Jugador 1)"
                 : "Turno: Cliente (Jugador 2)";
         }
@@ -116,14 +117,14 @@ public class PlayerController : NetworkBehaviour
       
         if (!IsOwner) return;
 
-        if (!TurnManager.Instance.IsMyTurn(OwnerClientId)) return;
+        if (!TurnManager1.Instance.IsMyTurn(OwnerClientId)) return;
 
         // Movimiento (Input)
        
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            TurnManager.Instance.EndTurnServerRpc();
+            TurnManager1.Instance.EndTurnServerRpc();
         }
     }
 
