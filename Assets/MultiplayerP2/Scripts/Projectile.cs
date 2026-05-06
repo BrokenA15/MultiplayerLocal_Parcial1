@@ -108,10 +108,10 @@ public class Projectile : NetworkBehaviour
         if (!IsServer) return;
 
         // 🔄 cambiar turno
-        TurnManager.Instance.EndTurnServerRpc();
+        TurnManager1.Instance.EndTurnServerRpc();
 
         // 🎥 mover cámara al nuevo jugador
-        MoveCameraClientRpc(TurnManager.Instance.currentTurn.Value);
+        MoveCameraClientRpc(TurnManager1.Instance.currentTurn.Value);
 
         // 💣 destruir bala
         if (NetworkObject.IsSpawned)
