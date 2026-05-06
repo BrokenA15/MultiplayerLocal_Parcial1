@@ -19,6 +19,18 @@ public class PhaseAnnouncer : MonoBehaviour
         }
     }
 
+    void Update()
+    {
+        // Si todavía no estamos suscritos y el manager ya apareció...
+        if (TurnManager1.Instance != null && !suscrito)
+        {
+            TurnManager1.Instance.currentPhase.OnValueChanged += AlCambiarFase;
+            ActualizarTexto(TurnManager1.Instance.currentPhase.Value);
+            suscrito = true;
+        }
+    }
+    private bool suscrito = false;
+
     private void AlCambiarFase(TurnManager1.GamePhase valorAnterior, TurnManager1.GamePhase valorNuevo)
     {
         ActualizarTexto(valorNuevo);
@@ -26,9 +38,15 @@ public class PhaseAnnouncer : MonoBehaviour
 
     private void ActualizarTexto(TurnManager1.GamePhase fase)
     {
+        Debug.Log("Intentando cambiar texto a: " + fase.ToString()); // LOG 1
         if (textoFase != null)
         {
             textoFase.text = "FASE: " + fase.ToString().ToUpper();
+            Debug.Log("¡Texto cambiado con éxito!"); // LOG 2
+        }
+        else
+        {
+            Debug.LogError("¡ERROR: No has asignado el componente de texto en el Inspector!");
         }
     }
 
