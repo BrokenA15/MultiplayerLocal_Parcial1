@@ -12053,8 +12053,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Join
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2a3d8e38f95845e4ca94d0ea9cf0a660, type: 2}
-  m_sharedMaterial: {fileID: -8549832528609199639, guid: 2a3d8e38f95845e4ca94d0ea9cf0a660, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -71894,7 +71894,7 @@ Transform:
   m_GameObject: {fileID: 864964858}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 31.86, y: 10.900002, z: -10}
+  m_LocalPosition: {x: 28.78, y: 1, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -72495,8 +72495,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Host
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2a3d8e38f95845e4ca94d0ea9cf0a660, type: 2}
-  m_sharedMaterial: {fileID: -8549832528609199639, guid: 2a3d8e38f95845e4ca94d0ea9cf0a660, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -112045,8 +112045,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: New Text
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2a3d8e38f95845e4ca94d0ea9cf0a660, type: 2}
-  m_sharedMaterial: {fileID: -8549832528609199639, guid: 2a3d8e38f95845e4ca94d0ea9cf0a660, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -118615,8 +118615,8 @@ MonoBehaviour:
 
     C para menos potencia '
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2a3d8e38f95845e4ca94d0ea9cf0a660, type: 2}
-  m_sharedMaterial: {fileID: -8549832528609199639, guid: 2a3d8e38f95845e4ca94d0ea9cf0a660, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -143772,8 +143772,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Presiona Q y E para mover el angulo en que disparas
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2a3d8e38f95845e4ca94d0ea9cf0a660, type: 2}
-  m_sharedMaterial: {fileID: -8549832528609199639, guid: 2a3d8e38f95845e4ca94d0ea9cf0a660, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
