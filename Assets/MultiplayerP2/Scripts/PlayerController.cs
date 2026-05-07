@@ -12,6 +12,16 @@ public class PlayerController : NetworkBehaviour
     public Transform cameraPivot;
     private bool gameEnded = false;
 
+
+    
+    [Header("Movement")]////
+    public Rigidbody rb;//
+    public float jumpForce = 7f;////
+    public LayerMask groundLayer;////
+    private bool isGrounded;////
+    public float maxMovementPerTurn = 5f;////
+    private float remainingMovement;////
+    
     [Header("Barrier")]
     public GameObject barrierPrefab;
     public Transform barrierPoint;
@@ -104,6 +114,8 @@ public class PlayerController : NetworkBehaviour
 
     void StartTurn()
     {
+        remainingMovement = maxMovementPerTurn;////
+
         var phase = TurnManager.Instance.currentPhase.Value;
 
         switch (phase)
@@ -179,6 +191,10 @@ public class PlayerController : NetworkBehaviour
                 HandleBarrierPlacement();
                 break;
 
+            case TurnManager.GamePhase.Movement:
+                HandleMovementTurn();
+                break;
+
             case TurnManager.GamePhase.Shooting:
                 HandleShootingTurn();
                 break;
@@ -214,9 +230,21 @@ public class PlayerController : NetworkBehaviour
             barrierPreviewInstance.position += move;
         }
     }
-    
+
+    void HandleMovementTurn()
+    {
+        HandlePlayerMovement();
+
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            TurnManager.Instance.EndTurnServerRpc();
+        }
+    }
+
     void HandleShootingTurn()
     {
+        HandlePlayerMovement();
+
         if (Input.GetKeyDown(KeyCode.Space))
         {
             // aquí puedes llamar tu sistema de disparo si quieres
@@ -225,6 +253,39 @@ public class PlayerController : NetworkBehaviour
             TurnManager.Instance.EndTurnServerRpc();
         }
     }
+
+    void HandlePlayerMovement()////
+    {
+        float horizontal = Input.GetAxisRaw("Horizontal");
+
+        if (remainingMovement > 0f)
+        {
+            Vector3 movement = Vector3.right * horizontal * moveSpeed * Time.deltaTime;
+
+            float distance = Mathf.Abs(movement.x);
+
+            if (distance > remainingMovement)
+            {
+                movement.x = Mathf.Sign(movement.x) * remainingMovement;
+                distance = remainingMovement;
+            }
+
+            rb.MovePosition(rb.position + movement);
+
+            remainingMovement -= distance;
+        }
+
+        isGrounded = Physics.Raycast(transform.position, Vector3.down, 1.1f, groundLayer);
+
+        if (Input.GetKeyDown(KeyCode.W) && isGrounded)
+        {
+            rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, 0);
+
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        }
+    }
+    /////////////////////////////////////////////////////////////////////////////////////////////
+    
 
     [Rpc(SendTo.Server)]
     void PlaceBarrierServerRpc(Vector3 position)

@@ -2949,7 +2949,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1be11b6ac405c7942ae0af8b1ef95b39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tiempoDeEspera: 15
+  tiempoDeEspera: 20
   objetoUI: {fileID: 1485792265}
 --- !u!1 &1515778384
 GameObject:

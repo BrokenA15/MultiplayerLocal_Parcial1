@@ -10,6 +10,7 @@ public class TurnManager : NetworkBehaviour
     public enum GamePhase
     {
         PlacingBarriers,
+        Movement,////
         Shooting,
         RoundEnd
     }
@@ -23,7 +24,7 @@ public class TurnManager : NetworkBehaviour
     public NetworkVariable<int> player2Hits = new NetworkVariable<int>(0);
 
     private int shotsThisRound = 0;
-    
+    private int movementsThisRound = 0;////
     private int barriersPlacedThisRound = 0;
     private int shotsFiredThisRound = 0;
     
@@ -63,7 +64,11 @@ public class TurnManager : NetworkBehaviour
          {
              barriersPlacedThisRound++;
          }
-         else if (currentPhase.Value == GamePhase.Shooting)
+        else if (currentPhase.Value == GamePhase.Movement)////
+        {
+            movementsThisRound++;
+        }                                                 ////
+        else if (currentPhase.Value == GamePhase.Shooting)
          {
              shotsFiredThisRound++;
          }
@@ -130,16 +135,30 @@ public class TurnManager : NetworkBehaviour
 
             if (barriersPlacedThisRound >= totalNeeded)
             {
-                Debug.Log("➡️ Cambiando a fase de DISPARO");
+                Debug.Log("➡️ Cambiando a fase de MOVIMIENTO");//
+
+                currentPhase.Value = GamePhase.Movement;//
+                movementsThisRound = 0;//
+
+                ResetTurnToFirstPlayer();
+            }
+        }
+
+        else if (currentPhase.Value == GamePhase.Movement)////
+        {
+            int totalMovements = playersCount;
+
+            if (movementsThisRound >= totalMovements)
+            {
+                Debug.Log("➡ Cambiando a fase de DISPARO");
 
                 currentPhase.Value = GamePhase.Shooting;
                 shotsFiredThisRound = 0;
 
                 ResetTurnToFirstPlayer();
             }
-        }
+        }                                               ////
 
-       
         else if (currentPhase.Value == GamePhase.Shooting)
         {
             int totalShots = playersCount;
@@ -170,6 +189,7 @@ public class TurnManager : NetworkBehaviour
         Debug.Log("🔁 Nueva ronda: " + currentRound.Value);
 
         barriersPlacedThisRound = 0;
+        movementsThisRound = 0;////
         shotsFiredThisRound = 0;
 
         currentPhase.Value = GamePhase.PlacingBarriers;
