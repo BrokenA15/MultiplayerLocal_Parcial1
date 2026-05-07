@@ -27,7 +27,7 @@ public class TurnManager1 : NetworkBehaviour
     [Rpc(SendTo.Server)]
     public void EndTurnServerRpc()
     {
-        // Si terminamos de disparar, pasamos al siguiente jugador y volvemos a construcción
+        // Si terminamos de disparar, pasamos al siguiente jugador y volvemos a construcciï¿½n
         if (currentPhase.Value == GamePhase.Disparo)
         {
             PasarSiguienteJugador();
@@ -35,10 +35,14 @@ public class TurnManager1 : NetworkBehaviour
         }
         else
         {
-            // Si estábamos en construcción, pasamos a disparo del mismo jugador
+            // Si estï¿½bamos en construcciï¿½n, pasamos a disparo del mismo jugador
             currentPhase.Value = GamePhase.Disparo;
+           
+            
         }
     }
+    
+   
 
     private void PasarSiguienteJugador()
     {

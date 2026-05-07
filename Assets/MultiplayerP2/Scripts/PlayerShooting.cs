@@ -13,19 +13,28 @@ public class PlayerShooting : NetworkBehaviour
 
     // --- SEGURO ANTI-SPAM ---
     private bool yaDisparoEnEsteTurno = false;
+    private bool eraMiTurno = false;
 
     void Update()
     {
         if (!IsOwner) return;
 
-        // 🔥 PRIMERO verificar turno
-        if (TurnManager.Instance != null && !TurnManager.Instance.IsMyTurn(OwnerClientId))
+        if (TurnManager1.Instance == null) return;
+
+        bool esMiTurno = TurnManager1.Instance.IsMyTurn(OwnerClientId);
+        bool esFaseDisparo = TurnManager1.Instance.currentPhase.Value == TurnManager1.GamePhase.Disparo;
+        
+        if (esMiTurno && !eraMiTurno)
         {
             yaDisparoEnEsteTurno = false;
-            return;
         }
+      
+        eraMiTurno = esMiTurno;
 
-        // 🔥 DESPUÉS bloquear disparo
+        if (!esMiTurno) return;
+
+        if (!esFaseDisparo) return;
+
         if (yaDisparoEnEsteTurno) return;
 
         HandleAim();
@@ -59,16 +68,21 @@ public class PlayerShooting : NetworkBehaviour
 
     void HandleShoot()
     {
+        if (TurnManager1.Instance.currentPhase.Value != TurnManager1.GamePhase.Disparo)
+            return;
+        
         if (Input.GetKeyDown(KeyCode.Return) && !yaDisparoEnEsteTurno)
         {
             yaDisparoEnEsteTurno = true;
 
             ShootServerRpc(shootPoint.position, shootPoint.right, force);
 
-            // ❌ NO cambiar turno aquí
+            
         }
     }
 
+   
+    
     [Rpc(SendTo.Server)]
     void ShootServerRpc(Vector3 pos, Vector3 dir, float force)
     {

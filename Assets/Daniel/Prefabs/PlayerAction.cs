@@ -3,7 +3,7 @@ using Unity.Netcode;
 
 public class PlayerAction : NetworkBehaviour
 {
-    [Header("Configuración")]
+    [Header("Configuraciï¿½n")]
     [SerializeField] private GameObject barreraPrefab;
     [SerializeField] private GameObject barreraGhostPrefab;
     [SerializeField] private float rangoMaximo = 10f;
@@ -24,7 +24,7 @@ public class PlayerAction : NetworkBehaviour
     {
         if (!IsOwner) return;
 
-        // Usamos TurnManager1 porque así se llama tu clase
+        // Usamos TurnManager1 porque asï¿½ se llama tu clase
         if (TurnManager1.Instance == null || !TurnManager1.Instance.IsMyTurn(OwnerClientId))
         {
             if (ghostInstance != null) Destroy(ghostInstance);
@@ -39,7 +39,7 @@ public class PlayerAction : NetworkBehaviour
             if (shootingScript != null) shootingScript.enabled = false;
             HandleBuilding();
         }
-        else
+        else 
         {
             if (ghostInstance != null) Destroy(ghostInstance);
             if (shootingScript != null) shootingScript.enabled = true;
@@ -61,7 +61,7 @@ public class PlayerAction : NetworkBehaviour
         {
             Vector3 puntoEnPlano = rayo.GetPoint(distanciaAlPlano);
 
-            // Corregido: .x y .y en minúsculas
+            // Corregido: .x y .y en minï¿½sculas
             float distancia = Vector2.Distance(
                 new Vector2(transform.position.x, transform.position.y),
                 new Vector2(puntoEnPlano.x, puntoEnPlano.y)
