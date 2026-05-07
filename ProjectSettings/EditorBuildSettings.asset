@@ -23,7 +23,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/MultiplayerP2/P2Multi.unity
     guid: f8c263b2ad5311f4cbe3c1fbb5316236
-  - enabled: 1
+  - enabled: 0
     path: Assets/MultiplayerP2/P3MultiPeerToPeer.unity
     guid: 11c528941ef358640a37b1ca6d79f1d5
   - enabled: 1
