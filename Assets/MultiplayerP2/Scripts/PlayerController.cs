@@ -11,7 +11,7 @@ public class PlayerController : NetworkBehaviour
     private int score = 0;
     private TurnManager1 turnManager1;
     public Transform cameraPivot;
-    public static bool gameEnded = false;
+    public bool gameEnded = false;
 
     [Header("Movimiento")]
     [SerializeField] private float moveSpeed = 5f;
@@ -144,6 +144,9 @@ public class PlayerController : NetworkBehaviour
 
     void Update()
     {
+
+        if (gameEnded) return;
+
         if (textoDelbug != null && TurnManager1.Instance != null)
         {
             textoDelbug.text =

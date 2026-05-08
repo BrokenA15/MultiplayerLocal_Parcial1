@@ -928,8 +928,9 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   textoDelbug: {fileID: 0}
   cameraPivot: {fileID: 4830714047260527139}
+  gameEnded: 0
   moveSpeed: 5
-  maxMovementDistance: 20
+  maxMovementDistance: 10
   movementSlider: {fileID: 6777125070218891992}
   health:
     UpdateTraits:
@@ -937,7 +938,7 @@ MonoBehaviour:
       MaxSecondsBetweenUpdates: 0
     m_InternalValue: 100
   healthBar: {fileID: 510140572085985298}
-  staminaBar: {fileID: 0}
+  staminaBar: {fileID: 6777125070218891992}
 --- !u!114 &6090721946005100128
 MonoBehaviour:
   m_ObjectHideFlags: 0
