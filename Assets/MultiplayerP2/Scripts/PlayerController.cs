@@ -10,7 +10,7 @@ public class PlayerController : NetworkBehaviour
     private int score = 0;
     private TurnManager1 turnManager1;
     public Transform cameraPivot;
-    private bool gameEnded = false;
+    public static bool gameEnded = false;
 
 
 
@@ -46,13 +46,10 @@ public class PlayerController : NetworkBehaviour
     {
         if (healthBar != null)
         {
-            // Forzamos que la divisi�n sea decimal usando 100f
             float currentFill = currentHealth / 100f;
             healthBar.value = currentFill;
 
-            // Si esto imprime 0.8, 0.6, etc., el c�digo est� PERFECTO 
-            // y el problema es el componente Slider en Unity.
-            Debug.Log("Valor enviado al Slider: " + currentFill);
+         
         }
     }
 
@@ -79,6 +76,8 @@ public class PlayerController : NetworkBehaviour
             ShowResultClientRpc(winnerId);
         }
     }
+
+   
 
     [ClientRpc]
     void ShowResultClientRpc(ulong winnerId)
@@ -114,7 +113,25 @@ public class PlayerController : NetworkBehaviour
                 : "Turno: Cliente (Jugador 2)";
         }
 
-      
+     
+
+        if (transform.position.y <= -5f)
+        {
+            Debug.Log("MURIO");
+            health.Value = 0;
+            
+                gameEnded = true;
+
+                Debug.Log("Jugador muerto");
+
+                ulong loserId = OwnerClientId;
+
+                ulong winnerId = NetworkManager.Singleton.ConnectedClientsIds
+                    .First(id => id != loserId);
+
+                ShowResultClientRpc(winnerId);
+            
+        }
         if (!IsOwner) return;
 
         if (!TurnManager1.Instance.IsMyTurn(OwnerClientId)) return;
