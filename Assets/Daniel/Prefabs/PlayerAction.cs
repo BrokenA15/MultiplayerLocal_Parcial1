@@ -60,8 +60,6 @@ public class PlayerAction : NetworkBehaviour
         if (planoConstruccion.Raycast(rayo, out float distanciaAlPlano))
         {
             Vector3 puntoEnPlano = rayo.GetPoint(distanciaAlPlano);
-
-            // Corregido: .x y .y en min�sculas
             float distancia = Vector2.Distance(
                 new Vector2(transform.position.x, transform.position.y),
                 new Vector2(puntoEnPlano.x, puntoEnPlano.y)
@@ -69,9 +67,21 @@ public class PlayerAction : NetworkBehaviour
 
             if (distancia <= rangoMaximo)
             {
-                if (ghostInstance == null) ghostInstance = Instantiate(barreraGhostPrefab);
-                ghostInstance.SetActive(true);
+                if (ghostInstance == null)
+                {
+                    ghostInstance = Instantiate(barreraGhostPrefab);
 
+                    // --- SOLUCIÓN AL EMPUJÓN ---
+                    // Ignoramos colisión entre el jugador y el ghost justo al nacer
+                    Collider playerCollider = GetComponent<Collider>();
+                    Collider ghostCollider = ghostInstance.GetComponent<Collider>();
+                    if (playerCollider != null && ghostCollider != null)
+                    {
+                        Physics.IgnoreCollision(playerCollider, ghostCollider);
+                    }
+                }
+
+                ghostInstance.SetActive(true);
                 ghostInstance.transform.position = new Vector3(puntoEnPlano.x, puntoEnPlano.y, profundidadZFija);
 
                 if (Input.GetMouseButtonDown(0))
