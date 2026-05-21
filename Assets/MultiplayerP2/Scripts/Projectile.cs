@@ -62,7 +62,7 @@ public class Projectile : NetworkBehaviour
         foreach (Collider col in objetosCercanos)
         {
             // 🧱 1. DESTRUIR SUELO Y BARRERAS
-            if (col.CompareTag("Suelo") || col.CompareTag("Barrera"))
+            if (col.CompareTag("Suelo"))
             {
                 if (col.TryGetComponent(out NetworkObject netObj))
                 {
@@ -72,7 +72,18 @@ public class Projectile : NetworkBehaviour
                 {
                     Destroy(col.gameObject);
                 }
-                continue; // Pasamos al siguiente objeto
+
+                continue;
+            }
+
+            if (col.CompareTag("Barrera"))
+            {
+                if (col.TryGetComponent(out BarrierHealth barrier))
+                {
+                    barrier.RecibirImpacto();
+                }
+            
+                continue;
             }
 
             // 🧍 2. DAÑAR Y EMPUJAR JUGADORES
