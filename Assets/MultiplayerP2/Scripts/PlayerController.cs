@@ -13,6 +13,16 @@ public class PlayerController : NetworkBehaviour
     public Transform cameraPivot;
     public bool gameEnded = false;
 
+    [Header("PowerUps")]        /*              */
+
+    // Escudo anti explosiones
+    public NetworkVariable<bool> shieldActive =
+    new NetworkVariable<bool>(false);
+
+    // Bonus de explosión
+    public NetworkVariable<float> explosionMultiplier =
+        new NetworkVariable<float>(1f);     /*              */
+
     [Header("Movimiento")]
     [SerializeField] private float moveSpeed = 5f;
 
@@ -117,7 +127,41 @@ public class PlayerController : NetworkBehaviour
         }
     }
 
-   
+    public void AddHealth(int amount)  /*           Nigga           */
+    {
+        if (!IsServer) return;
+
+        health.Value += amount;
+
+        if (health.Value > 100)
+            health.Value = 100;
+    }
+
+    public void AddStamina(float amount)
+    {
+        if (!IsServer) return;
+
+        remainingMovement.Value += amount;
+
+        if (remainingMovement.Value > maxMovementDistance)
+            remainingMovement.Value = maxMovementDistance;
+    }
+
+    public void ActivateShield()
+    {
+        if (!IsServer) return;
+
+        shieldActive.Value = true;
+    }
+
+    public void IncreaseExplosionRadius(float multiplier)/*                     */
+    {
+        if (!IsServer) return;
+
+        explosionMultiplier.Value = multiplier;
+    }
+
+
 
     [ClientRpc]
     void ShowResultClientRpc(ulong winnerId)

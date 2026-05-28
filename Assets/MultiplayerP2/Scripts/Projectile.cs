@@ -6,6 +6,8 @@ public class Projectile : NetworkBehaviour
     private Rigidbody rb;
     private ulong ownerId;
 
+    private float explosionMultiplier = 1f;
+
     [Header("Configuración de Bala")]
     [SerializeField] private float lifeTime = 5f;
     [SerializeField] private float radioExplosion = 3.0f; // Tamaño del cráter/empuje
@@ -21,7 +23,17 @@ public class Projectile : NetworkBehaviour
     public void Launch(Vector3 direction, float force, ulong shooterId)
     {
         ownerId = shooterId;
+      /*                                          Nuevo                                            */
+        if (NetworkManager.Singleton.ConnectedClients.TryGetValue(shooterId, out var client))
+        {
+            PlayerController player = client.PlayerObject.GetComponent<PlayerController>();
 
+            if (player != null)
+            {
+                explosionMultiplier = player.explosionMultiplier.Value;
+            }
+        }
+      /*                                                                                          */
         rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
         rb.AddForce(direction * force, ForceMode.Impulse);
@@ -57,7 +69,11 @@ public class Projectile : NetworkBehaviour
     void ProcesarExplosionMecanica(Vector3 origen)
     {
         // Detectar todo en el radio de la explosión
-        Collider[] objetosCercanos = Physics.OverlapSphere(origen, radioExplosion);
+        // Collider[] objetosCercanos = Physics.OverlapSphere(origen, radioExplosion); /*                Comentado                 */
+        float finalRadius = radioExplosion * explosionMultiplier;
+
+        Collider[] objetosCercanos =
+            Physics.OverlapSphere(origen, finalRadius);/*                  Nuevo                                 */
 
         foreach (Collider col in objetosCercanos)
         {
@@ -92,7 +108,11 @@ public class Projectile : NetworkBehaviour
                 // Aplicar Daño
                 if (col.TryGetComponent(out PlayerController victim))
                 {
-                    victim.TakeDamage(20);
+                    // Si tiene escudo, ignoramos daño
+                    if (!victim.shieldActive.Value)                          /*    Nuevo IF para el pwrup del escudo    */
+                    {
+                        victim.TakeDamage(20);
+                    }
                 }
 
                 // Aplicar Empuje (Knockback)
