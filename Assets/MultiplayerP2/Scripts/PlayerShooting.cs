@@ -4,7 +4,10 @@ using Unity.Netcode;
 public class PlayerShooting : NetworkBehaviour
 {
     public Transform shootPoint;
-    public GameObject projectilePrefab;
+    //public GameObject projectilePrefab;
+    [SerializeField] private GameObject dynamitePrefab;     //
+    [SerializeField] private GameObject arrowPrefab;        //
+    [SerializeField] private GameObject poisonPotionPrefab; //
 
     public float minForce = 5f;
     public float maxForce = 20f;
@@ -14,6 +17,26 @@ public class PlayerShooting : NetworkBehaviour
     // --- SEGURO ANTI-SPAM ---
     private bool yaDisparoEnEsteTurno = false;
     private bool eraMiTurno = false;
+
+    [SerializeField] private LineRenderer trajectoryLine; /*        TrajectoryLine      */
+
+    [SerializeField] private int trajectoryPoints = 50;
+    [SerializeField] private float timeStep = 0.1f;
+
+    [SerializeField] private float dynamiteMass = 1.5f;
+    [SerializeField] private float arrowMass = 0.15f;
+    [SerializeField] private float poisonMass = 2.5f;   /*                              */
+
+
+
+    public enum WeaponType
+    {
+        Dynamite,
+        Bow,
+        PoisonPotion
+    }
+
+    public WeaponType currentWeapon = WeaponType.Dynamite;
 
     void Update()
     {
@@ -37,8 +60,10 @@ public class PlayerShooting : NetworkBehaviour
 
         if (yaDisparoEnEsteTurno) return;
 
+        HandleWeaponSelection(); //
         HandleAim();
         HandleShoot();
+        DrawTrajectory(); //
     }
 
     void HandleAim()
@@ -66,6 +91,7 @@ public class PlayerShooting : NetworkBehaviour
         shootPoint.right = (shootPoint.position - transform.position).normalized;
     }
 
+
     void HandleShoot()
     {
         if (TurnManager1.Instance.currentPhase.Value != TurnManager1.GamePhase.Disparo)
@@ -75,18 +101,111 @@ public class PlayerShooting : NetworkBehaviour
         {
             yaDisparoEnEsteTurno = true;
 
-            ShootServerRpc(shootPoint.position, shootPoint.right, force);
+            //ShootServerRpc(shootPoint.position, shootPoint.right, force);
+            ShootServerRpc(shootPoint.position, shootPoint.right, force,(int)currentWeapon); // 
 
-            
+
         }
     }
 
-   
-    
-    [Rpc(SendTo.Server)]
-    void ShootServerRpc(Vector3 pos, Vector3 dir, float force)
+    float GetCurrentMass()                  /*          TrajectoryLine          */
     {
-        GameObject proj = Instantiate(projectilePrefab, pos, Quaternion.identity);
+        switch (currentWeapon)
+        {
+            case WeaponType.Bow:
+                return arrowMass;
+
+            case WeaponType.PoisonPotion:
+                return poisonMass;
+
+            default:
+                return dynamiteMass;
+        }
+    }
+
+    void DrawTrajectory()
+    {
+        trajectoryLine.positionCount = trajectoryPoints;
+
+        Vector3 startPosition = shootPoint.position;
+
+        float mass = GetCurrentMass();
+
+        Vector3 velocity =
+            shootPoint.right * (force / mass);
+
+        for (int i = 0; i < trajectoryPoints; i++)
+        {
+            float time = i * timeStep;
+
+            Vector3 point =
+                startPosition +
+                velocity * time +
+                0.5f * Physics.gravity * time * time;
+
+            trajectoryLine.SetPosition(i, point);
+
+            if (i > 0)
+            {
+                Vector3 previous =
+                    trajectoryLine.GetPosition(i - 1);
+
+                if (Physics.Linecast(previous, point))
+                {
+                    trajectoryLine.positionCount = i + 1;
+                    break;
+                }
+            }
+        }
+    }                                           /*---------------------------------------*/
+
+    void HandleWeaponSelection()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            currentWeapon = WeaponType.Dynamite;
+            Debug.Log("Dinamita seleccionada");
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            currentWeapon = WeaponType.Bow;
+            Debug.Log("Arco seleccionado");
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            currentWeapon = WeaponType.PoisonPotion;
+            Debug.Log("Poción seleccionada");
+        }
+    }
+    [Rpc(SendTo.Server)]
+    //void ShootServerRpc(Vector3 pos, Vector3 dir, float force)
+      void ShootServerRpc(Vector3 pos, Vector3 dir, float force, int weaponType)  // Se le agrego weaponType para la seleccion de armas
+    {
+        //GameObject proj = Instantiate(projectilePrefab, pos, Quaternion.identity);
+        GameObject selectedPrefab = dynamitePrefab;
+
+        WeaponType weapon =
+            (WeaponType)weaponType;
+
+        switch (weapon)
+        {
+            case WeaponType.Bow:
+                selectedPrefab = arrowPrefab;
+                break;
+
+            case WeaponType.PoisonPotion:
+                selectedPrefab = poisonPotionPrefab;
+                break;
+
+            case WeaponType.Dynamite:
+            default:
+                selectedPrefab = dynamitePrefab;
+                break;
+        }
+
+        GameObject proj = Instantiate(selectedPrefab, pos, Quaternion.identity);
 
         NetworkObject netObj = proj.GetComponent<NetworkObject>();
         netObj.Spawn();
@@ -115,3 +234,4 @@ public class PlayerShooting : NetworkBehaviour
         }
     }
 }
+
