@@ -49,18 +49,18 @@ public class ConnectionManager : MonoBehaviour
         // 🐛 BUCLE ESTILO WORMS: Creamos 3 personajes para este equipo
         for (int i = 0; i < 3; i++)
         {
-            // Usamos el índice del bucle para que cada personaje vaya a un punto diferente
-            // Si el arreglo tiene menos de 3 puntos, usamos % para evitar errores
             Transform puntoEspecifico = grupoSpawn[i % grupoSpawn.Length];
+
+            // 🌟 NUEVO: Añadir un offset en X basado en el índice 'i' para que no compartan la misma posición
+            float offsetPorClon = 1.5f; // Distancia en metros entre cada clon
+            Vector3 posicionDesfasada = puntoEspecifico.position + new Vector3(i * offsetPorClon, 0f, 0f);
 
             GameObject player = Instantiate(
                 prefabToSpawn,
-                puntoEspecifico.position,
+                posicionDesfasada, // Usamos la nueva posición con offset
                 puntoEspecifico.rotation
             );
 
-            // CLAVE: Usamos SpawnWithOwnership en lugar de SpawnAsPlayerObject.
-            // Esto le da el control de red al cliente sobre sus 3 personajes de forma individual.
             player.GetComponent<NetworkObject>().SpawnWithOwnership(clientId, true);
         }
 

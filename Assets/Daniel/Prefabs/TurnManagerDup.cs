@@ -153,6 +153,8 @@ public class TurnManager1 : NetworkBehaviour
         {
             bool esElActivo = (p.NetworkObject.NetworkObjectId == idPersonajeActivo);
 
+            p.SetHighlight(esElActivo);
+
             p.enabled = esElActivo;
 
             if (p.TryGetComponent(out PlayerController movimiento))

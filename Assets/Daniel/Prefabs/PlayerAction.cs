@@ -15,6 +15,8 @@ public class PlayerAction : NetworkBehaviour
     [Header("Ajustes de Eje")]
     [SerializeField] private float profundidadZFija = 0f;
 
+    [Header("Visual Resalte")]
+    [SerializeField] private GameObject indicadorSeleccionado; 
     void Awake()
     {
         shootingScript = GetComponent<PlayerShooting>();
@@ -177,6 +179,14 @@ public class PlayerAction : NetworkBehaviour
         {
             TurnManager1.Instance.currentTurn.OnValueChanged -= OnTurnChanged;
             TurnManager1.Instance.currentPhase.OnValueChanged -= OnPhaseChanged;
+        }
+    }
+
+    public void SetHighlight(bool active)
+    {
+        if (indicadorSeleccionado != null)
+        {
+            indicadorSeleccionado.SetActive(active);
         }
     }
 }
