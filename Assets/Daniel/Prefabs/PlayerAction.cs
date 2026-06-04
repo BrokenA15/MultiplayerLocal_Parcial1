@@ -3,7 +3,7 @@ using Unity.Netcode;
 
 public class PlayerAction : NetworkBehaviour
 {
-    [Header("Configuraci�n")]
+    [Header("Configuración")]
     [SerializeField] private GameObject barreraPrefab;
     [SerializeField] private GameObject barreraGhostPrefab;
     [SerializeField] private float rangoMaximo = 10f;
@@ -13,22 +13,79 @@ public class PlayerAction : NetworkBehaviour
     private PlayerShooting shootingScript;
 
     [Header("Ajustes de Eje")]
-    [SerializeField] private float profundidadZFija = 0f; // Corregido: sin espacio
+    [SerializeField] private float profundidadZFija = 0f;
 
     void Awake()
     {
         shootingScript = GetComponent<PlayerShooting>();
     }
 
+    public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
+
+        if (IsServer && TurnManager1.Instance != null)
+            TurnManager1.Instance.RegistrarPersonaje(this);
+
+        if (TurnManager1.Instance != null)
+        {
+            TurnManager1.Instance.ActualizarControlesLocalesRpc(TurnManager1.Instance.activeCharacterNetworkId.Value);
+            TurnManager1.Instance.currentTurn.OnValueChanged += OnTurnChanged;
+
+            // 📷 Al cambiar de fase, si volvemos a Construccion le devolvemos la cámara al personaje
+            TurnManager1.Instance.currentPhase.OnValueChanged += OnPhaseChanged;
+        }
+    }
+
+    private void OnTurnChanged(ulong previousTurn, ulong newTurn)
+    {
+        yaConstruyoEnEstaFase = false;
+    }
+
+    private void OnPhaseChanged(TurnManager1.GamePhase previousPhase, TurnManager1.GamePhase newPhase)
+    {
+        // 📷 Cuando termina el disparo y volvemos a Construccion, la cámara regresa al personaje activo
+        if (newPhase == TurnManager1.GamePhase.Construccion)
+        {
+            if (TurnManager1.Instance != null &&
+                NetworkObject.NetworkObjectId == TurnManager1.Instance.activeCharacterNetworkId.Value)
+            {
+                if (CameraManager.Instance != null)
+                    CameraManager.Instance.FollowTarget(transform);
+            }
+        }
+
+        // 🔑 FIX DISPARO PLAYER 2: Cuando la fase cambia a Disparo, encendemos
+        // PlayerShooting directamente aquí — no dependemos de Update() para esto
+        // porque Update() solo corre si el script estaba activo antes del cambio.
+        if (newPhase == TurnManager1.GamePhase.Disparo)
+        {
+            bool somoElActivo = TurnManager1.Instance != null &&
+                NetworkObject.NetworkObjectId == TurnManager1.Instance.activeCharacterNetworkId.Value;
+
+            if (shootingScript != null)
+                shootingScript.enabled = somoElActivo;
+        }
+
+        // Al volver a Construccion, apagar disparo y resetear construcción
+        if (newPhase == TurnManager1.GamePhase.Construccion)
+        {
+            if (shootingScript != null) shootingScript.enabled = false;
+        }
+    }
+
     void Update()
     {
         if (!IsOwner) return;
 
-        // Usamos TurnManager1 porque as� se llama tu clase
-        if (TurnManager1.Instance == null || !TurnManager1.Instance.IsMyTurn(OwnerClientId))
+        if (Input.GetKeyDown(KeyCode.O) || Input.GetKeyDown(KeyCode.Tab))
         {
-            if (ghostInstance != null) Destroy(ghostInstance);
-            yaConstruyoEnEstaFase = false;
+            if (TurnManager1.Instance.personajeComprometido.Value)
+            {
+                Debug.Log("[TURNO] Ya moviste o construiste — no puedes cambiar de personaje");
+                return;
+            }
+            TurnManager1.Instance.CambiarPersonajePropioServerRpc(OwnerClientId);
             return;
         }
 
@@ -39,10 +96,12 @@ public class PlayerAction : NetworkBehaviour
             if (shootingScript != null) shootingScript.enabled = false;
             HandleBuilding();
         }
-        else 
+        else
         {
-            if (ghostInstance != null) Destroy(ghostInstance);
-            if (shootingScript != null) shootingScript.enabled = true;
+            LimpiarGhost();
+            // Encendemos el disparo solo si este script está activo (personaje activo)
+            if (shootingScript != null && this.enabled)
+                shootingScript.enabled = true;
         }
     }
 
@@ -50,7 +109,7 @@ public class PlayerAction : NetworkBehaviour
     {
         if (yaConstruyoEnEstaFase)
         {
-            if (ghostInstance != null) Destroy(ghostInstance);
+            LimpiarGhost();
             return;
         }
 
@@ -70,15 +129,10 @@ public class PlayerAction : NetworkBehaviour
                 if (ghostInstance == null)
                 {
                     ghostInstance = Instantiate(barreraGhostPrefab);
-
-                    // --- SOLUCIÓN AL EMPUJÓN ---
-                    // Ignoramos colisión entre el jugador y el ghost justo al nacer
                     Collider playerCollider = GetComponent<Collider>();
                     Collider ghostCollider = ghostInstance.GetComponent<Collider>();
                     if (playerCollider != null && ghostCollider != null)
-                    {
                         Physics.IgnoreCollision(playerCollider, ghostCollider);
-                    }
                 }
 
                 ghostInstance.SetActive(true);
@@ -88,7 +142,8 @@ public class PlayerAction : NetworkBehaviour
                 {
                     SpawnBarreraServerRpc(ghostInstance.transform.position);
                     yaConstruyoEnEstaFase = true;
-                    Destroy(ghostInstance);
+                    LimpiarGhost();
+                    TurnManager1.Instance.ComprometерPersonajeServerRpc(OwnerClientId);
                 }
             }
             else
@@ -100,10 +155,28 @@ public class PlayerAction : NetworkBehaviour
         if (Input.GetKeyDown(KeyCode.Space)) TurnManager1.Instance.EndTurnServerRpc();
     }
 
+    public void LimpiarGhost()
+    {
+        if (ghostInstance != null)
+        {
+            Destroy(ghostInstance);
+            ghostInstance = null;
+        }
+    }
+
     [Rpc(SendTo.Server)]
     void SpawnBarreraServerRpc(Vector3 pos)
     {
         GameObject nueva = Instantiate(barreraPrefab, pos, Quaternion.identity);
         nueva.GetComponent<NetworkObject>().Spawn();
+    }
+
+    public override void OnNetworkDespawn()
+    {
+        if (TurnManager1.Instance != null)
+        {
+            TurnManager1.Instance.currentTurn.OnValueChanged -= OnTurnChanged;
+            TurnManager1.Instance.currentPhase.OnValueChanged -= OnPhaseChanged;
+        }
     }
 }

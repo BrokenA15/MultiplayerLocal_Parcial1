@@ -929,6 +929,16 @@ MonoBehaviour:
   textoDelbug: {fileID: 0}
   cameraPivot: {fileID: 4830714047260527139}
   gameEnded: 0
+  shieldActive:
+    UpdateTraits:
+      MinSecondsBetweenUpdates: 0
+      MaxSecondsBetweenUpdates: 0
+    m_InternalValue: 0
+  explosionMultiplier:
+    UpdateTraits:
+      MinSecondsBetweenUpdates: 0
+      MaxSecondsBetweenUpdates: 0
+    m_InternalValue: 1
   moveSpeed: 5
   maxMovementDistance: 10
   movementSlider: {fileID: 6777125070218891992}
@@ -999,11 +1009,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
   shootPoint: {fileID: 507451771862346355}
-  projectilePrefab: {fileID: 6594768173184064821, guid: ffc18eb867245104ca0827802b41f278, type: 3}
+  dynamitePrefab: {fileID: 6594768173184064821, guid: ffc18eb867245104ca0827802b41f278, type: 3}
+  arrowPrefab: {fileID: 0}
+  poisonPotionPrefab: {fileID: 0}
   minForce: 5
   maxForce: 20
   force: 10
   angle: 45
+  trajectoryLine: {fileID: 0}
+  trajectoryPoints: 50
+  timeStep: 0.1
+  dynamiteMass: 1.5
+  arrowMass: 0.15
+  poisonMass: 2.5
+  currentWeapon: 0
 --- !u!54 &6792244291071178814
 Rigidbody:
   m_ObjectHideFlags: 0

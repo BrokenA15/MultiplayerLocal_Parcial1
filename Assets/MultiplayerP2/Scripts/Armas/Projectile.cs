@@ -23,20 +23,24 @@ public class Projectile : NetworkBehaviour
     public void Launch(Vector3 direction, float force, ulong shooterId)
     {
         ownerId = shooterId;
-      /*                                          Nuevo                                            */
-        if (NetworkManager.Singleton.ConnectedClients.TryGetValue(shooterId, out var client))
+        /*                                          Nuevo                                            */
+        // 🔑 FIX: SpawnWithOwnership no asigna PlayerObject, buscamos por OwnerClientId
+        PlayerController[] todosLosPlayers = FindObjectsByType<PlayerController>(FindObjectsSortMode.None);
+        foreach (PlayerController pc in todosLosPlayers)
         {
-            PlayerController player = client.PlayerObject.GetComponent<PlayerController>();
-
-            if (player != null)
+            if (pc.OwnerClientId == shooterId)
             {
-                explosionMultiplier = player.explosionMultiplier.Value;
+                explosionMultiplier = pc.explosionMultiplier.Value;
+                break;
             }
         }
-      /*                                                                                          */
+        /*                                                                                          */
         rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
-        rb.AddForce(direction * force, ForceMode.Impulse);
+        // 🔑 FIX: Dividimos por masa igual que la trayectoria (force / mass)
+        // para que el arco real coincida con la línea de previsualización
+        float mass = rb.mass > 0f ? rb.mass : 1f;
+        rb.AddForce(direction * (force / mass), ForceMode.VelocityChange);
 
         // ⏱️ destrucción automática si no golpea nada
         Invoke(nameof(Timeout), lifeTime);
@@ -98,7 +102,7 @@ public class Projectile : NetworkBehaviour
                 {
                     barrier.RecibirImpacto();
                 }
-            
+
                 continue;
             }
 
@@ -152,8 +156,20 @@ public class Projectile : NetworkBehaviour
     [Rpc(SendTo.ClientsAndHost)]
     void MoveCameraClientRpc(ulong newTurn)
     {
-        if (CameraManager.Instance != null)
-            CameraManager.Instance.MoveToPlayerByTurn(newTurn);
+        if (CameraManager.Instance == null || TurnManager1.Instance == null) return;
+
+        // Buscamos el personaje activo y le damos su Transform a la cámara
+        ulong activoId = TurnManager1.Instance.activeCharacterNetworkId.Value;
+        PlayerAction[] personajes = FindObjectsByType<PlayerAction>(FindObjectsSortMode.None);
+
+        foreach (PlayerAction p in personajes)
+        {
+            if (p.NetworkObject.NetworkObjectId == activoId)
+            {
+                CameraManager.Instance.FollowTarget(p.transform);
+                return;
+            }
+        }
     }
 
     // Visualizar el radio de la explosión en el Editor
