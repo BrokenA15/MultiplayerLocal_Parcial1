@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 3300751140853005829}
   - component: {fileID: 5998897359668551181}
   - component: {fileID: 3348528287984991584}
-  - component: {fileID: 4920798586361035852}
   - component: {fileID: 5420673301569365919}
+  - component: {fileID: 4920798586361035852}
   - component: {fileID: -5442581025944696416}
   m_Layer: 7
   m_Name: ProjectileMP
@@ -138,6 +138,22 @@ MonoBehaviour:
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 0
+--- !u!114 &5420673301569365919
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6594768173184064821}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41debef9886157848aface2145a2675d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  lifeTime: 5
+  radioExplosion: 2
+  fuerzaExplosion: 1
 --- !u!54 &4920798586361035852
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -165,22 +181,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 1
---- !u!114 &5420673301569365919
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6594768173184064821}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 41debef9886157848aface2145a2675d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ShowTopMostFoldoutHeaderGroup: 1
-  lifeTime: 5
-  radioExplosion: 2
-  fuerzaExplosion: 1
 --- !u!114 &-5442581025944696416
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -3,6 +3,7 @@ using Unity.Netcode;
 using TMPro;
 using System.Linq;
 using UnityEngine.UI;
+using System.Collections;
 
 public class PlayerController : NetworkBehaviour
 {
@@ -12,6 +13,7 @@ public class PlayerController : NetworkBehaviour
     private TurnManager1 turnManager1;
     public Transform cameraPivot;
     public bool gameEnded = false;
+    private Coroutine poisonCoroutine;      // new bs
 
     [Header("PowerUps")]
     public NetworkVariable<bool> shieldActive =
@@ -253,6 +255,39 @@ public class PlayerController : NetworkBehaviour
         }
 
         previousPosition = transform.position;
+    }
+
+    public void ApplyPoison(float duration, int damagePerSecond)        //New BS
+    {
+        if (!IsServer) return;
+
+        if (poisonCoroutine != null)
+        {
+            StopCoroutine(poisonCoroutine);
+        }
+
+        poisonCoroutine =
+            StartCoroutine(
+                PoisonRoutine(duration, damagePerSecond));
+    }
+
+    private IEnumerator PoisonRoutine(float duration, int damagePerSecond)    //New BS
+    {
+        float timer = 0f;
+
+        while (timer < duration)
+        {
+            if (gameEnded)
+                yield break;
+
+            TakeDamage(damagePerSecond);
+
+            yield return new WaitForSeconds(1f);
+
+            timer += 1f;
+        }
+
+        poisonCoroutine = null;
     }
 
     [ServerRpc]

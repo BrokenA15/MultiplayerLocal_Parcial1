@@ -84612,8 +84612,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6fa717f40ef57944a5e6131c6399b1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player1Pivot: {fileID: 1296708979}
-  player2Pivot: {fileID: 864964859}
   smoothSpeed: 5
   offset: {x: 0, y: 0, z: 0}
   projectileOffset: {x: -3, y: 2, z: -5}
@@ -86799,6 +86797,16 @@ MonoBehaviour:
       MaxSecondsBetweenUpdates: 0
     m_InternalValue: 0
   currentPhase:
+    UpdateTraits:
+      MinSecondsBetweenUpdates: 0
+      MaxSecondsBetweenUpdates: 0
+    m_InternalValue: 0
+  activeCharacterNetworkId:
+    UpdateTraits:
+      MinSecondsBetweenUpdates: 0
+      MaxSecondsBetweenUpdates: 0
+    m_InternalValue: 0
+  personajeComprometido:
     UpdateTraits:
       MinSecondsBetweenUpdates: 0
       MaxSecondsBetweenUpdates: 0

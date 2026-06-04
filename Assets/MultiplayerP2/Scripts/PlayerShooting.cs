@@ -160,9 +160,26 @@ public class PlayerShooting : NetworkBehaviour
         NetworkObject netObj = proj.GetComponent<NetworkObject>();
         netObj.Spawn();
 
-        Projectile projectileScript = proj.GetComponent<Projectile>();
+      /*Projectile projectileScript = proj.GetComponent<Projectile>();
         if (projectileScript != null)
-            projectileScript.Launch(dir, force, OwnerClientId);
+            projectileScript.Launch(dir, force, OwnerClientId);*/
+        if (proj.TryGetComponent(out Projectile dynamite))
+        {
+            dynamite.Launch(dir, force, OwnerClientId);
+        }
+        else if (proj.TryGetComponent(out ArrowProjectile arrow))
+        {
+            arrow.Launch(
+                dir,
+                force);
+        }
+        else if (proj.TryGetComponent(
+                     out PoisonPotionProjectile poison))
+        {
+            poison.Launch(
+                dir,
+                force);
+        }
 
         FollowProjectileClientRpc(netObj.NetworkObjectId);
     }
