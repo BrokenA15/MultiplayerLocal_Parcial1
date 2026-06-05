@@ -166142,8 +166142,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   smoothSpeed: 5
-  offset: {x: 0, y: 0, z: -10}
-  projectileOffset: {x: -3, y: 2, z: -5}
+  offset: {x: 0, y: 0, z: -20}
+  projectileOffset: {x: 0, y: 0, z: -15}
 --- !u!1001 &1835280053
 PrefabInstance:
   m_ObjectHideFlags: 0
