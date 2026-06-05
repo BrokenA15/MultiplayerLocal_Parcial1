@@ -44799,7 +44799,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1490306377}
         m_TargetAssemblyTypeName: RelayConnection, Assembly-CSharp
         m_MethodName: StartRelay
         m_Mode: 1
@@ -53021,8 +53021,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d306fe054087e04596ca290ae925a4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  victoryPanel: {fileID: 0}
-  losePanel: {fileID: 0}
+  victoryPanel: {fileID: 489368634}
+  losePanel: {fileID: 1484325337}
 --- !u!4 &819646300
 Transform:
   m_ObjectHideFlags: 0
@@ -56737,7 +56737,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1490306377}
         m_TargetAssemblyTypeName: RelayConnection, Assembly-CSharp
         m_MethodName: JoinRelay
         m_Mode: 1
@@ -95289,8 +95289,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f50f552703c57c48ab1873941017482, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  code: {fileID: 0}
-  codeInput: {fileID: 0}
+  code: {fileID: 204735894}
+  codeInput: {fileID: 1541929279}
 --- !u!114 &1490306378
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -129491,53 +129491,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4089259287289389966, guid: c8bc4f11c8ae31747a3ffd3434529055, type: 3}
   m_PrefabInstance: {fileID: 1986870500}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1987858540
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1987858542}
-  - component: {fileID: 1987858541}
-  m_Layer: 0
-  m_Name: MENU MANAGER
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1987858541
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1987858540}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d35e8637d4e68bf479b1551e317ae155, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  nombreEscena1: P2Multi
-  nombreEscena2: P2Multi2
-  nombreEscena3: P2Multi3
---- !u!4 &1987858542
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1987858540}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 625.81775, y: 1059.7634, z: -1512.2935}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1989808716
 GameObject:
   m_ObjectHideFlags: 0
@@ -139699,7 +139652,6 @@ SceneRoots:
   - {fileID: 1870143468}
   - {fileID: 682485188}
   - {fileID: 2077530914}
-  - {fileID: 1987858542}
   - {fileID: 819646300}
   - {fileID: 929677109}
   - {fileID: 1490306381}
