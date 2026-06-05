@@ -1144,9 +1144,9 @@ MonoBehaviour:
   AuthorityMode: 1
   TickSyncChildren: 0
   UseUnreliableDeltas: 0
-  SyncPositionX: 1
-  SyncPositionY: 1
-  SyncPositionZ: 1
+  SyncPositionX: 0
+  SyncPositionY: 0
+  SyncPositionZ: 0
   SyncRotAngleX: 1
   SyncRotAngleY: 1
   SyncRotAngleZ: 1
@@ -1200,7 +1200,7 @@ Rigidbody:
   m_GameObject: {fileID: 6991266331256345866}
   serializedVersion: 4
   m_Mass: 1
-  m_Drag: 0
+  m_Drag: 0.24
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -1216,7 +1216,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 126
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!114 &2497611634674741712
 MonoBehaviour:

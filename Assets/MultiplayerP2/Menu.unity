@@ -933,7 +933,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d35e8637d4e68bf479b1551e317ae155, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nombreEscenaJuego: PruebasXdxdxdMasSpawn
+  nombreEscena1: PruebasXdxdxdMasSpawn
+  nombreEscena2: PruebasXdxdxdMasSpawn 2
+  nombreEscena3: PruebasXdxdxdMasSpawn 3
 --- !u!4 &1569898539
 Transform:
   m_ObjectHideFlags: 0

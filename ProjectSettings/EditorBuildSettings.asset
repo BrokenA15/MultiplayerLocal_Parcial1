@@ -32,6 +32,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/MultiplayerP2/PruebasXdxdxdMasSpawn.unity
     guid: 233b0a7977afc104fb5ae908ba730921
+  - enabled: 1
+    path: Assets/MultiplayerP2/PruebasXdxdxdMasSpawn 2.unity
+    guid: 8fe78e19f6122204eb0e70a920363978
+  - enabled: 1
+    path: Assets/MultiplayerP2/PruebasXdxdxdMasSpawn 3.unity
+    guid: 95f068c694efebc4b96f767e13fa5b91
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0
