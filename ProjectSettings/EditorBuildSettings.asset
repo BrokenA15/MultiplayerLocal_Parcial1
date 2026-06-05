@@ -26,7 +26,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/MultiplayerP2/P3MultiPeerToPeer.unity
     guid: 11c528941ef358640a37b1ca6d79f1d5
-  - enabled: 1
+  - enabled: 0
     path: Assets/MultiplayerP2/PruebasEscenarioYModelos.unity
     guid: 6e960ca8247065a489e35aad5220a527
   - enabled: 1
@@ -41,7 +41,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/MultiplayerP2/PruebasXdxdxdMasSpawn 1.unity
     guid: c8ef58ef819fd794792a4a341401f22f
-  - enabled: 1
+  - enabled: 0
     path: Assets/MultiplayerP2/PruebasXdxdxdMasSpawn 4.unity
     guid: 75dafedcd2601f4499e28143805965bb
   m_configObjects:
