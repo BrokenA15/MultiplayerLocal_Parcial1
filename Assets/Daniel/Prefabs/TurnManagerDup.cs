@@ -23,7 +23,7 @@ public class TurnManager1 : NetworkBehaviour
 
     // 🔒 Límite de barreras por jugador (clientId -> cantidad usada)
     private Dictionary<ulong, int> barrerasUsadas = new Dictionary<ulong, int>();
-    private const int MAX_BARRERAS = 5;
+    public const int MAX_BARRERAS = 5;
 
     public override void OnNetworkSpawn()
     {
