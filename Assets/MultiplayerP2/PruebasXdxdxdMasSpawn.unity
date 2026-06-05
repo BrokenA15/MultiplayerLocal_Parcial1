@@ -165428,6 +165428,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   networkManager: {fileID: 1490306379}
+  nombresDeEscenas:
+  - PruebasXdxdxdMasSpawn
+  - PruebasXdxdxdMasSpawn 2
+  - PruebasXdxdxdMasSpawn 3
   leftSpawnPoints:
   - {fileID: 682485188}
   - {fileID: 2077530914}
@@ -221251,6 +221255,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nombreEscena1: P2Multi
   nombreEscena2: P2Multi2
+  nombreEscena3: P2Multi3
 --- !u!4 &1987858542
 Transform:
   m_ObjectHideFlags: 0

@@ -1,10 +1,17 @@
 ﻿using UnityEngine;
 using static Unity.Netcode.NetworkManager;
 using Unity.Netcode;
+using UnityEngine.SceneManagement; // Requerido para la gestión de escenas normales si se necesita
 
 public class ConnectionManager : MonoBehaviour
 {
     public NetworkManager networkManager;
+
+          // El nuevo panel de controles
+
+    [Header("Configuración de Niveles")]
+    [Tooltip("Escribe los nombres exactos de tus 3 escenas de juego aquí")]
+    [SerializeField] private string[] nombresDeEscenas = { "Nivel1", "Nivel2", "Nivel3" };
 
     // IMPORTANTE: Asegúrate en Unity de que estas listas tengan al menos 3 Transforms cada una
     public Transform[] leftSpawnPoints;
@@ -14,9 +21,39 @@ public class ConnectionManager : MonoBehaviour
 
     private int playerIndex = 0; // 0 para Host/Jugador 1, 1 para Cliente/Jugador 2
 
+    void Start()
+    {
+        networkManager.OnClientConnectedCallback += OnClientConnected;
+    }
+
+    // --- SECCIÓN 1: CONTROL DEL PANEL DE CONTROLES ---
+
+    
+
+
+    // --- SECCIÓN 2: INICIO DE PARTIDA CON ESCENA ALEATORIA ---
+
     public void Start_Host()
     {
+        // 1. Iniciamos el Host de Netcode normalmente
         NetworkManager.Singleton.StartHost();
+
+        // 2. Elegimos una escena de juego de forma aleatoria
+        if (nombresDeEscenas.Length > 0)
+        {
+            int indiceAleatorio = Random.Range(0, nombresDeEscenas.Length);
+            string escenaSeleccionada = nombresDeEscenas[indiceAleatorio];
+
+            Debug.Log($"[SERVER] Cargando escenario aleatorio: {escenaSeleccionada}");
+
+            // 3. Cargamos la escena usando el NetworkSceneManager. 
+            // Esto obligará a cualquier cliente que se conecte a sincronizarse y cargar este mismo mapa.
+            NetworkManager.Singleton.SceneManager.LoadScene(escenaSeleccionada, LoadSceneMode.Single);
+        }
+        else
+        {
+            Debug.LogError("No has configurado nombres de escenas en el array 'nombresDeEscenas'.");
+        }
     }
 
     public void Start_Client()
@@ -29,35 +66,22 @@ public class ConnectionManager : MonoBehaviour
         NetworkManager.Singleton.StartServer();
     }
 
-    void Start()
-    {
-        networkManager.OnClientConnectedCallback += OnClientConnected;
-    }
-
     private void OnClientConnected(ulong clientId)
     {
         if (!NetworkManager.Singleton.IsServer) return;
 
-        // Evitamos desbordamiento de índice si se conectan más de 2 jugadores por error
         if (playerIndex >= playerPrefabs.Length) return;
 
         GameObject prefabToSpawn = playerPrefabs[playerIndex];
-
-        // Decidimos qué grupo de puntos usar según el jugador que entra
         Transform[] grupoSpawn = (playerIndex == 0) ? leftSpawnPoints : rightSpawnPoints;
 
-        // 🐛 BUCLE ESTILO WORMS: Creamos 3 personajes para este equipo
         for (int i = 0; i < 3; i++)
         {
             Transform puntoEspecifico = grupoSpawn[i % grupoSpawn.Length];
 
-            // 🌟 NUEVO: Añadir un offset en X basado en el índice 'i' para que no compartan la misma posición
-            float offsetPorClon = 1.5f; // Distancia en metros entre cada clon
-            Vector3 posicionDesfasada = puntoEspecifico.position + new Vector3(i * offsetPorClon, 0f, 0f);
-
             GameObject player = Instantiate(
                 prefabToSpawn,
-                posicionDesfasada, // Usamos la nueva posición con offset
+                puntoEspecifico.position,
                 puntoEspecifico.rotation
             );
 
