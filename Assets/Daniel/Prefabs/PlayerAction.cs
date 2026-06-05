@@ -16,7 +16,7 @@ public class PlayerAction : NetworkBehaviour
     [SerializeField] private float profundidadZFija = 0f;
 
     [Header("Visual Resalte")]
-    [SerializeField] private GameObject indicadorSeleccionado; 
+    [SerializeField] private GameObject indicadorSeleccionado;
     void Awake()
     {
         shootingScript = GetComponent<PlayerShooting>();
@@ -109,9 +109,15 @@ public class PlayerAction : NetworkBehaviour
 
     void HandleBuilding()
     {
-        if (yaConstruyoEnEstaFase)
+        // 🔒 Si ya construyó o llegó al límite, solo mostrar ghost desactivado y esperar Space
+        bool sinBarreras = !TurnManager1.Instance.PuedeConstructor(OwnerClientId);
+
+        if (yaConstruyoEnEstaFase || sinBarreras)
         {
             LimpiarGhost();
+            // Space sigue funcionando para pasar a la fase de disparo
+            if (Input.GetKeyDown(KeyCode.Space))
+                TurnManager1.Instance.EndTurnServerRpc();
             return;
         }
 
@@ -154,7 +160,9 @@ public class PlayerAction : NetworkBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.Space)) TurnManager1.Instance.EndTurnServerRpc();
+        // Un solo punto de salida para Space — pasar a fase Disparo
+        if (Input.GetKeyDown(KeyCode.Space))
+            TurnManager1.Instance.EndTurnServerRpc();
     }
 
     public void LimpiarGhost()
@@ -169,6 +177,15 @@ public class PlayerAction : NetworkBehaviour
     [Rpc(SendTo.Server)]
     void SpawnBarreraServerRpc(Vector3 pos)
     {
+        // 🔒 Verificar límite de barreras antes de instanciar
+        if (!TurnManager1.Instance.PuedeConstructor(OwnerClientId))
+        {
+            Debug.Log($"[BARRERAS] Jugador {OwnerClientId} ya usó las {5} barreras permitidas");
+            return;
+        }
+
+        TurnManager1.Instance.RegistrarBarrera(OwnerClientId);
+
         GameObject nueva = Instantiate(barreraPrefab, pos, Quaternion.identity);
         nueva.GetComponent<NetworkObject>().Spawn();
     }

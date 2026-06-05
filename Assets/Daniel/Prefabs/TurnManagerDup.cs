@@ -21,6 +21,10 @@ public class TurnManager1 : NetworkBehaviour
 
     private List<PlayerAction> todosLosPersonajes = new List<PlayerAction>();
 
+    // 🔒 Límite de barreras por jugador (clientId -> cantidad usada)
+    private Dictionary<ulong, int> barrerasUsadas = new Dictionary<ulong, int>();
+    private const int MAX_BARRERAS = 5;
+
     public override void OnNetworkSpawn()
     {
         if (Instance == null) Instance = this;
@@ -88,13 +92,30 @@ public class TurnManager1 : NetworkBehaviour
     {
         if (currentPhase.Value == GamePhase.Disparo)
         {
+            // Solo aquí cambia el turno — después de disparar (o pasar el disparo)
             PasarTurnoAlSiguienteEquipo();
             currentPhase.Value = GamePhase.Construccion;
         }
         else
         {
+            // Construccion → Disparo siempre, aunque no haya construido nada
             currentPhase.Value = GamePhase.Disparo;
         }
+    }
+
+    // 🔒 Verifica si el jugador puede colocar más barreras
+    public bool PuedeConstructor(ulong clientId)
+    {
+        if (!barrerasUsadas.ContainsKey(clientId)) return true;
+        return barrerasUsadas[clientId] < MAX_BARRERAS;
+    }
+
+    // 🔒 Registra una barrera usada por el jugador
+    public void RegistrarBarrera(ulong clientId)
+    {
+        if (!barrerasUsadas.ContainsKey(clientId))
+            barrerasUsadas[clientId] = 0;
+        barrerasUsadas[clientId]++;
     }
 
     private void PasarTurnoAlSiguienteEquipo()

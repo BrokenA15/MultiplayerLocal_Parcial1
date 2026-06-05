@@ -225,11 +225,7 @@ public class PlayerController : NetworkBehaviour
         if (!IsOwner) return;
 
         HandleMovement();
-
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            TurnManager1.Instance.EndTurnServerRpc();
-        }
+        // Space lo maneja exclusivamente PlayerAction para evitar doble llamada a EndTurnServerRpc
     }
 
     private void HandleMovement()
