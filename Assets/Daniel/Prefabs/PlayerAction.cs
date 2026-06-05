@@ -17,6 +17,7 @@ public class PlayerAction : NetworkBehaviour
 
     [Header("Visual Resalte")]
     [SerializeField] private GameObject indicadorSeleccionado;
+
     void Awake()
     {
         shootingScript = GetComponent<PlayerShooting>();
@@ -33,8 +34,6 @@ public class PlayerAction : NetworkBehaviour
         {
             TurnManager1.Instance.ActualizarControlesLocalesRpc(TurnManager1.Instance.activeCharacterNetworkId.Value);
             TurnManager1.Instance.currentTurn.OnValueChanged += OnTurnChanged;
-
-            // 📷 Al cambiar de fase, si volvemos a Construccion le devolvemos la cámara al personaje
             TurnManager1.Instance.currentPhase.OnValueChanged += OnPhaseChanged;
         }
     }
@@ -46,33 +45,27 @@ public class PlayerAction : NetworkBehaviour
 
     private void OnPhaseChanged(TurnManager1.GamePhase previousPhase, TurnManager1.GamePhase newPhase)
     {
-        // 📷 Cuando termina el disparo y volvemos a Construccion, la cámara regresa al personaje activo
-        if (newPhase == TurnManager1.GamePhase.Construccion)
-        {
-            if (TurnManager1.Instance != null &&
-                NetworkObject.NetworkObjectId == TurnManager1.Instance.activeCharacterNetworkId.Value)
-            {
-                if (CameraManager.Instance != null)
-                    CameraManager.Instance.FollowTarget(transform);
-            }
-        }
+        bool somoElActivo = TurnManager1.Instance != null &&
+            NetworkObject.NetworkObjectId == TurnManager1.Instance.activeCharacterNetworkId.Value;
 
-        // 🔑 FIX DISPARO PLAYER 2: Cuando la fase cambia a Disparo, encendemos
-        // PlayerShooting directamente aquí — no dependemos de Update() para esto
-        // porque Update() solo corre si el script estaba activo antes del cambio.
         if (newPhase == TurnManager1.GamePhase.Disparo)
         {
-            bool somoElActivo = TurnManager1.Instance != null &&
-                NetworkObject.NetworkObjectId == TurnManager1.Instance.activeCharacterNetworkId.Value;
-
+            // Encender disparo solo en el personaje activo
             if (shootingScript != null)
                 shootingScript.enabled = somoElActivo;
+
+            // Limpiar ghost al entrar en fase de disparo
+            LimpiarGhost();
         }
 
-        // Al volver a Construccion, apagar disparo y resetear construcción
         if (newPhase == TurnManager1.GamePhase.Construccion)
         {
+            // Apagar disparo siempre al volver a construcción
             if (shootingScript != null) shootingScript.enabled = false;
+
+            // Devolver cámara al personaje activo
+            if (somoElActivo && CameraManager.Instance != null)
+                CameraManager.Instance.FollowTarget(transform);
         }
     }
 
@@ -80,6 +73,7 @@ public class PlayerAction : NetworkBehaviour
     {
         if (!IsOwner) return;
 
+        // Cambio de personaje — O o Tab
         if (Input.GetKeyDown(KeyCode.O) || Input.GetKeyDown(KeyCode.Tab))
         {
             if (TurnManager1.Instance.personajeComprometido.Value)
@@ -101,7 +95,6 @@ public class PlayerAction : NetworkBehaviour
         else
         {
             LimpiarGhost();
-            // Encendemos el disparo solo si este script está activo (personaje activo)
             if (shootingScript != null && this.enabled)
                 shootingScript.enabled = true;
         }
@@ -109,13 +102,12 @@ public class PlayerAction : NetworkBehaviour
 
     void HandleBuilding()
     {
-        // 🔒 Si ya construyó o llegó al límite, solo mostrar ghost desactivado y esperar Space
         bool sinBarreras = !TurnManager1.Instance.PuedeConstructor(OwnerClientId);
 
+        // Si ya construyó o no tiene barreras disponibles — solo esperar Space para pasar a disparo
         if (yaConstruyoEnEstaFase || sinBarreras)
         {
             LimpiarGhost();
-            // Space sigue funcionando para pasar a la fase de disparo
             if (Input.GetKeyDown(KeyCode.Space))
                 TurnManager1.Instance.EndTurnServerRpc();
             return;
@@ -137,10 +129,19 @@ public class PlayerAction : NetworkBehaviour
                 if (ghostInstance == null)
                 {
                     ghostInstance = Instantiate(barreraGhostPrefab);
-                    Collider playerCollider = GetComponent<Collider>();
-                    Collider ghostCollider = ghostInstance.GetComponent<Collider>();
-                    if (playerCollider != null && ghostCollider != null)
-                        Physics.IgnoreCollision(playerCollider, ghostCollider);
+
+                    int ghostLayer = LayerMask.NameToLayer("Ghost");
+                    if (ghostLayer != -1)
+                    {
+                        ghostInstance.layer = ghostLayer;
+                        foreach (Transform hijo in ghostInstance.GetComponentsInChildren<Transform>())
+                            hijo.gameObject.layer = ghostLayer;
+                    }
+                    else
+                    {
+                        Collider ghostCollider = ghostInstance.GetComponent<Collider>();
+                        if (ghostCollider != null) ghostCollider.enabled = false;
+                    }
                 }
 
                 ghostInstance.SetActive(true);
@@ -160,7 +161,7 @@ public class PlayerAction : NetworkBehaviour
             }
         }
 
-        // Un solo punto de salida para Space — pasar a fase Disparo
+        // Space: pasar de Construccion a Disparo sin construir
         if (Input.GetKeyDown(KeyCode.Space))
             TurnManager1.Instance.EndTurnServerRpc();
     }
@@ -177,10 +178,9 @@ public class PlayerAction : NetworkBehaviour
     [Rpc(SendTo.Server)]
     void SpawnBarreraServerRpc(Vector3 pos)
     {
-        // 🔒 Verificar límite de barreras antes de instanciar
         if (!TurnManager1.Instance.PuedeConstructor(OwnerClientId))
         {
-            Debug.Log($"[BARRERAS] Jugador {OwnerClientId} ya usó las {5} barreras permitidas");
+            Debug.Log($"[BARRERAS] Jugador {OwnerClientId} ya usó las {TurnManager1.MAX_BARRERAS} barreras permitidas");
             return;
         }
 
@@ -202,8 +202,6 @@ public class PlayerAction : NetworkBehaviour
     public void SetHighlight(bool active)
     {
         if (indicadorSeleccionado != null)
-        {
             indicadorSeleccionado.SetActive(active);
-        }
     }
 }

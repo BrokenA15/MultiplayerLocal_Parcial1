@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7035644333421445303}
   - component: {fileID: 6968025736221852889}
   - component: {fileID: 3651333726802721594}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: BarrerasFantasma
   m_TagString: Barrera
   m_Icon: {fileID: 0}
