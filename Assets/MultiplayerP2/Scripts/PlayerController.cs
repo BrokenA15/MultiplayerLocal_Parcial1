@@ -13,7 +13,7 @@ public class PlayerController : NetworkBehaviour
     private TurnManager1 turnManager1;
     public Transform cameraPivot;
     public bool gameEnded = false;
-    private Coroutine poisonCoroutine;      // new bs
+    private Coroutine poisonCoroutine;
 
     [Header("PowerUps")]
     public NetworkVariable<bool> shieldActive =
@@ -36,8 +36,6 @@ public class PlayerController : NetworkBehaviour
         );
 
     private Vector3 previousPosition;
-
-    // 🔒 NUEVO: Rastrea si este personaje ya movió ESTE turno (local, no necesita ser NetworkVariable)
     private bool yaMoveEnEsteTurno = false;
 
     [Header("UI Movimiento")]
@@ -62,9 +60,7 @@ public class PlayerController : NetworkBehaviour
         UpdateMovementUI(remainingMovement.Value);
 
         if (IsServer)
-        {
             remainingMovement.Value = maxMovementDistance;
-        }
 
         previousPosition = transform.position;
 
@@ -75,14 +71,10 @@ public class PlayerController : NetworkBehaviour
         if (debugObj != null)
             textoDelbug = debugObj.GetComponent<TMP_Text>();
 
-        // 🔒 NUEVO: Escuchamos cambios de turno para resetear la bandera local
         if (TurnManager1.Instance != null)
-        {
             TurnManager1.Instance.currentTurn.OnValueChanged += OnTurnChanged;
-        }
     }
 
-    // 🔒 NUEVO: Al cambiar el turno, cualquier personaje resetea su bandera de movimiento
     private void OnTurnChanged(ulong previousTurn, ulong newTurn)
     {
         yaMoveEnEsteTurno = false;
@@ -122,7 +114,6 @@ public class PlayerController : NetworkBehaviour
         {
             Debug.Log($"Clon {OwnerClientId} eliminado");
 
-            // 🔑 FIX: Solo termina si TODO el equipo está muerto
             PlayerController[] todosLosJugadores = FindObjectsByType<PlayerController>(FindObjectsSortMode.None);
             bool equipoCompleto = true;
 
@@ -136,8 +127,25 @@ public class PlayerController : NetworkBehaviour
                 }
             }
 
-            if (!equipoCompleto) return;
+            if (!equipoCompleto)
+            {
+                // 🔑 Clon muerto pero equipo vivo — desactivar este clon
+                gameEnded = true; // Evita que siga recibiendo daño o input
 
+                PlayerAction accion = GetComponent<PlayerAction>();
+
+                if (TurnManager1.Instance != null && accion != null)
+                    TurnManager1.Instance.DesregistrarPersonaje(accion);
+
+                if (accion != null) accion.enabled = false;
+                if (TryGetComponent(out PlayerShooting disparo)) disparo.enabled = false;
+
+                // Ocultar el clon en todos los clientes
+                OcultarClonClientRpc();
+                return;
+            }
+
+            // Todo el equipo muerto — fin del juego
             gameEnded = true;
             Debug.Log("Equipo eliminado — fin del juego");
 
@@ -147,6 +155,13 @@ public class PlayerController : NetworkBehaviour
 
             ShowResultClientRpc(winnerId);
         }
+    }
+
+    // 🔑 Oculta el clon muerto en todos los clientes
+    [ClientRpc]
+    void OcultarClonClientRpc()
+    {
+        gameObject.SetActive(false);
     }
 
     public void AddHealth(int amount)
@@ -208,24 +223,17 @@ public class PlayerController : NetworkBehaviour
                 : "Turno: Cliente (Jugador 2)";
         }
 
-        // Muerte por caída
+        // 🔑 Muerte por caída — pasa por TakeDamage para respetar la lógica de equipo
         if (transform.position.y <= -5f)
         {
             if (IsServer)
-            {
-                health.Value = 0;
-                gameEnded = true;
-                ulong loserId = OwnerClientId;
-                ulong winnerId = NetworkManager.Singleton.ConnectedClientsIds.First(id => id != loserId);
-                ShowResultClientRpc(winnerId);
-            }
+                TakeDamage(health.Value);
             return;
         }
 
         if (!IsOwner) return;
 
         HandleMovement();
-        // Space lo maneja exclusivamente PlayerAction para evitar doble llamada a EndTurnServerRpc
     }
 
     private void HandleMovement()
@@ -234,7 +242,6 @@ public class PlayerController : NetworkBehaviour
 
         float horizontal = Input.GetAxisRaw("Horizontal");
 
-        // 🔒 NUEVO: Si intenta moverse y aún no comprometió, avisar al servidor
         if (horizontal != 0f && !yaMoveEnEsteTurno)
         {
             yaMoveEnEsteTurno = true;
@@ -246,40 +253,31 @@ public class PlayerController : NetworkBehaviour
 
         float movedDistance = Vector3.Distance(transform.position, previousPosition);
         if (movedDistance > 0f)
-        {
             SpendMovementServerRpc(movedDistance);
-        }
 
         previousPosition = transform.position;
     }
 
-    public void ApplyPoison(float duration, int damagePerSecond)        //New BS
+    public void ApplyPoison(float duration, int damagePerSecond)
     {
         if (!IsServer) return;
 
         if (poisonCoroutine != null)
-        {
             StopCoroutine(poisonCoroutine);
-        }
 
-        poisonCoroutine =
-            StartCoroutine(
-                PoisonRoutine(duration, damagePerSecond));
+        poisonCoroutine = StartCoroutine(PoisonRoutine(duration, damagePerSecond));
     }
 
-    private IEnumerator PoisonRoutine(float duration, int damagePerSecond)    //New BS
+    private IEnumerator PoisonRoutine(float duration, int damagePerSecond)
     {
         float timer = 0f;
 
         while (timer < duration)
         {
-            if (gameEnded)
-                yield break;
+            if (gameEnded) yield break;
 
             TakeDamage(damagePerSecond);
-
             yield return new WaitForSeconds(1f);
-
             timer += 1f;
         }
 

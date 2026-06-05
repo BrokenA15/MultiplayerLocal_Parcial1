@@ -84428,8 +84428,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   smoothSpeed: 5
-  offset: {x: 0, y: 0, z: -15}
-  projectileOffset: {x: 0, y: 0, z: -10}
+  offset: {x: 0, y: 0, z: -20}
+  projectileOffset: {x: 0, y: 0, z: -15}
 --- !u!1001 &1835355563
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -91615,7 +91615,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d35e8637d4e68bf479b1551e317ae155, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nombreEscenaJuego: P2Multi
+  nombreEscena1: P2Multi
+  nombreEscena2: P2Multi2
+  nombreEscena3: P2Multi3
 --- !u!4 &1987858542
 Transform:
   m_ObjectHideFlags: 0
